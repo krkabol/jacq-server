@@ -1,0 +1,37 @@
+version: "3.3"
+
+services:
+    mariadb-slave:
+        image: yidigun/mariadb-replication:10.7
+        restart: unless-stopped
+        hostname: ${HOSTNAME}
+        ports:
+            - "3306:3306/tcp"
+        environment:
+            - TZ=Europe/Vienna
+            - LANG=de_AT.UTF-8
+            - REPL_MODE=slave
+            - REPL_SERVER_ID=10
+            - REPL_USERNAME=repl
+            - REPL_PASSWORD="something"
+            - REPL_MASTER_HOST=mariadb-master.jacq.com
+            - REPL_MASTER_PORT=3306
+        volumes:
+            - /data/mariadb/data:/var/lib/mysql
+            - /data/mariadb/log:/var/log/mysql
+            - /data/mariadb/run:/run/mysqld
+
+    phpmyadmin:
+        image: phpmyadmin
+        ports:
+          - 8080:80
+        depends_on:
+          - mariadb-slave
+        environment:
+          - PMA_ARBITRARY=1
+          - PMA_HOST=mariadb-slave
+          - UPLOAD_LIMIT=100M
+          - MAX_EXECUTION_TIME=6000
+
+volumes:
+  mysqldata:
