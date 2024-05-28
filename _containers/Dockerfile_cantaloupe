@@ -6,8 +6,6 @@ EXPOSE 8182
 
 VOLUME /imageroot
 
-# COPY cantaloupe/sample.jp2 /imageroot/
-
 # Update packages and install tools
 RUN apt-get update -qy && apt-get dist-upgrade -qy && \
     apt-get install -qy --no-install-recommends curl imagemagick \

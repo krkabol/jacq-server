@@ -1,42 +1,41 @@
 version: "3.3"
 
 services:
-    mariadb-slave:
-        image: yidigun/mariadb-replication:10.7
-        restart: unless-stopped
-        container_name: jacq_prc_slave
-        hostname: herbarium2.natur.cuni.cz
-        ports:
-            - "3306:3306"
-        environment:
-            - TZ=Europe/Vienna
-            - LANG=de_AT.UTF-8
-            - REPL_MODE=slave
-            - REPL_SERVER_ID=10
-            - REPL_USERNAME=repl
-            - REPL_PASSWORD="something"
-            - REPL_MASTER_HOST=mariadb-master.jacq.com
-            - REPL_MASTER_PORT=3306
-        volumes:
-            - /data/mariadb/data:/var/lib/mysql
-            - /data/mariadb/log:/var/log/mysql
-            - /data/mariadb/run:/run/mysqld
-
-    phpmyadmin:
-        image: phpmyadmin
-        container_name: jacq_prc_admin
-#        ports:         #only for development
-#          - 8080:80
-        depends_on:
-          - mariadb-slave
-        environment:
-          - PMA_ARBITRARY=1
-          - PMA_HOST=mariadb-slave
-          - UPLOAD_LIMIT=100M
-          - MAX_EXECUTION_TIME=6000
+#    mariadb-slave:
+#        image: yidigun/mariadb-replication:10.7
+#        restart: unless-stopped
+#        container_name: jacq_prc_slave
+#        hostname: herbarium2.natur.cuni.cz
+##        ports: #only for development
+##            - "3306:3306"
+#        environment:
+#            - TZ=Europe/Vienna
+#            - LANG=de_AT.UTF-8
+#            - REPL_MODE=slave
+#            - REPL_SERVER_ID=10
+#            - REPL_USERNAME=repl
+#            - REPL_PASSWORD="something"
+#            - REPL_MASTER_HOST=mariadb-master.jacq.com
+#            - REPL_MASTER_PORT=3306
+#        volumes:
+#            - ./data/mariadb/data:/var/lib/mysql
+#            - ./data/mariadb/log:/var/log/mysql
+#            - ./data/mariadb/run:/run/mysqld
+#
+#    phpmyadmin:
+#        image: phpmyadmin
+#        container_name: jacq_prc_admin
+##        ports:         #only for development
+##          - 8080:80
+#        depends_on:
+#          - mariadb-slave
+#        environment:
+#          - PMA_ARBITRARY=1
+#          - PMA_HOST=mariadb-slave
+#          - UPLOAD_LIMIT=100M
+#          - MAX_EXECUTION_TIME=6000
 
     cantaloupe:
-        image: cantaloupe
         build:
             context: ./_containers
             dockerfile: Dockerfile_cantaloupe
@@ -52,4 +51,6 @@ services:
             LOG_APPLICATION_LEVEL: warn
             LOG_ACCESS_CONSOLEAPPENDER_ENABLED: "true"
         volumes:
-            - /data/cantaloupe:/imageroot/
+            - ./data/cantaloupe/:/imageroot
+
+#    mirador:
