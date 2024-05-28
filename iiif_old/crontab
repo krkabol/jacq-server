@@ -1,7 +1,0 @@
-MAILTO=ruzej4af@natur.cuni.cz
-
-# Periodically process new herbarium images
-0 2 * * * /home/herbarium/gen_image_db.sh
-
-# Renew Kerberos ticket every six hours
-0 */6 * * * /home/herbarium/renew_kerb_ticket.sh
