@@ -46,3 +46,50 @@ spíše lépe mát uložený proformu jako .json, tu načíst s cahce a jen modi
     $this->sendResponse(new JsonResponse($data));
 ```
 
+## mount CESNET NFS
+https://du.cesnet.cz/cs/navody/nfs/start
+https://perun.cesnet.cz/fed/gui/#usr/info?id=59773&active=1;
+
+* ověřit hostname ping -c 1 ``herbarium2.natur.cuni.cz``
+```shell
+sudo mkdir -p /storage/cesnet-du5
+sudo apt install krb5-user krb5-config nfs-common libnfsidmap1
+wget https://du.cesnet.cz/_media/cs/navody/nfs/krb5.conf
+sudo mv krb5.conf /etc/krb5.conf
+sudo chown root:root /etc/krb5.conf
+kinit krkabol@EINFRA
+ssh -o PubkeyAuthentication=no -o GSSAPIAuthentication=no krkabol@ssh.du5.cesnet.cz "remctl kdccesnet.ics.muni.cz accounts nfskeytab" > krb5.keytab
+sudo mv krb5.keytab /etc/krb5.keytab
+sudo chown root:root /etc/krb5.keytab
+ls -l /etc/krb5.keytab
+#-rw------- 1 root root 57 Nov  2 09:48 /etc/krb5.keytab
+findmnt
+```
+* Nastavení nfs-utils je v souboru /etc/default/nfs-common. Nastavíme hodnoty následovně:
+```
+NEED_STATD=yes
+STATDOPTS=
+NEED_IDMAPD=yes
+NEED_GSSD=yes
+```
+*
+```shell
+
+sudo cp /etc/krb5.keytab /etc/krb5.keytab.novotp
+sudo chown novotp:novotp /etc/krb5.keytab.novotp
+```
+* nastavení cron
+```shell
+crontab -e
+# kinit -k -t /etc/krb5.keytab.novotp nfs/krkabol@EINFRA
+```
+  nfs.du5.cesnet.cz:/disk_only/backup/VO_prfuk/shared/VO_prfuk_1042/herbare
+* Nastavení /etc/fstab
+  Do souboru /etc/fstab dopsat řádek:
+
+nfs.du5.cesnet.cz:/ /storage/cesnet-du5   nfs4   sec=krb5,rsize=1048576,wsize=1048576   0 0
+
+```shell
+service portmap start
+service gssd start
+```
