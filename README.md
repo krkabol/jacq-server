@@ -77,20 +77,30 @@ NEED_GSSD=yes
 sudo cp /etc/krb5.keytab /etc/krb5.keytab.novotp
 sudo chown novotp:novotp /etc/krb5.keytab.novotp
 ```
-* nastavení cron
+
+
 ```shell
 crontab -e
-# kinit -k -t /etc/krb5.keytab.novotp nfs/krkabol@EINFRA
-```
-  nfs.du5.cesnet.cz:/disk_only/backup/VO_prfuk/shared/VO_prfuk_1042/herbare
-* Nastavení /etc/fstab
-  Do souboru /etc/fstab dopsat řádek:
+# 0 */12 * * * kinit -k -t /etc/krb5.keytab.novotp nfs/krkabol@EINFRA
 
-nfs.du5.cesnet.cz:/ /storage/cesnet-du5   nfs4   sec=krb5,rsize=1048576,wsize=1048576   0 0
+sudo nano /etc/fstab
+# nfs.du5.cesnet.cz:/disk_only/backup/VO_prfuk/shared/VO_prfuk_1042/herbare /storage/cesnet-du5   nfs4   sec=krb5,rsize=1048576,wsize=1048576   0 0
+sudo nano /etc/selinux/config
+# SELINUX=disabled
 
-```shell
-service portmap start
-service gssd start
+sudo nano /etc/idmapd.conf
+
+# Domain = EINFRA
+
+# [Translation]
+# Method = static, nsswitch
+
+# [Static]
+
+# nfs/krkabol@EINFRA = novotp
+# storage@EINFRA = users
+# nfs/backup_VO@EINFRA = novotp
+
 findmnt
 
 ```
