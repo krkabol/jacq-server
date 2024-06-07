@@ -1,6 +1,10 @@
 # jacq-server
 deployment for herbarium2.natur.cuni.cz server including MariaDB replica and IIIF server
 
+- automatic updates - https://phoenixnap.com/kb/automatic-security-updates-ubuntu
+- require pubkey - https://www.linux.org/threads/how-to-force-ssh-login-via-public-key-authentication.8726/
+-
+
 ## MariaDB = replica of JACQ database_input
 * https://hub.docker.com/r/yidigun/mariadb-replication - vypadá nejlépe, podle něj postupováno
 
@@ -15,6 +19,16 @@ has UI, should be disabled/proxy (:8182/admin vs :8182/iiif)- https://training.i
 for every image a info.json is downloaded https://training.iiif.io/intro-to-iiif/SOFTWARE.html, it contains dimension - so why to store it..?
 
 https://cantaloupe-project.github.io/manual/5.0/getting-started.html
+
+sample call http://localhost:8182/iiif/2/prc_475444.jp2/full/300,/0/default.jpg
+
+## Minio = demo S3 storage
+https://registry.hub.docker.com/r/minio/minio
+http://www.sefidian.com/2022/04/08/deploy-standalone-minio-using-docker-compose/
+
+> The MinIO deployment starts using default root credentials minioadmin:minioadmin. You can test the deployment using the MinIO Console, an embedded object browser built into MinIO Server. Point a web browser running on the host machine to http://127.0.0.1:9000 and log in with the root credentials. You can use the Browser to create buckets, upload objects, and browse the contents of the MinIO server.
+
+using prc_475443 and prc_475444 records as tester in bucket "prc".
 
 ## Mirador - IIIF viewer
 https://iiif.bgbm.org/
@@ -53,7 +67,7 @@ https://perun.cesnet.cz/fed/gui/#usr/info?id=59773&active=1;
 * ověřit hostname ping -c 1 ``herbarium2.natur.cuni.cz``
 ```shell
 sudo mkdir -p /storage/cesnet-du5
-sudo apt install krb5-user krb5-config nfs-common libnfsidmap1 remctl-client 
+sudo apt install krb5-user krb5-config nfs-common libnfsidmap1 remctl-client
 wget https://du.cesnet.cz/_media/cs/navody/nfs/krb5.conf
 sudo mv krb5.conf /etc/krb5.conf
 sudo chown root:root /etc/krb5.conf
