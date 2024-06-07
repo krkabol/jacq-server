@@ -6,8 +6,8 @@ services:
 #        restart: unless-stopped
 #        container_name: jacq_prc_slave
 #        hostname: herbarium2.natur.cuni.cz
-##        ports: #only for development
-##            - "3306:3306"
+#        ports:
+#            - "3306:3306"
 #        environment:
 #            - TZ=Europe/Vienna
 #            - LANG=de_AT.UTF-8
@@ -18,30 +18,34 @@ services:
 #            - REPL_MASTER_HOST=mariadb-master.jacq.com
 #            - REPL_MASTER_PORT=3306
 #        volumes:
-#            - ./data/mariadb/data:/var/lib/mysql
-#            - ./data/mariadb/log:/var/log/mysql
-#            - ./data/mariadb/run:/run/mysqld
-#
-#    phpmyadmin:
-#        image: phpmyadmin
-#        container_name: jacq_prc_admin
-##        ports:         #only for development
-##          - 8080:80
-#        depends_on:
-#          - mariadb-slave
-#        environment:
-#          - PMA_ARBITRARY=1
-#          - PMA_HOST=mariadb-slave
-#          - UPLOAD_LIMIT=100M
-#          - MAX_EXECUTION_TIME=6000
+#            - ./data/slave_jacq/data:/var/lib/mysql
+#            - ./data/slave_jacq/log:/var/log/mysql
+#            - ./data/slave_jacq/run:/run/mysqld
+
+    phpmyadmin:
+        image: phpmyadmin
+        container_name: jacq_prc_myadmin
+        ports:
+            - 8080:80
+        depends_on:
+#            - mariadb-slave
+            - mariadb-viewer
+        environment:
+            - PMA_ARBITRARY=1
+            - UPLOAD_LIMIT=10M
+            - MAX_EXECUTION_TIME=6000
+
+    #    proxy:
 
     cantaloupe:
         build:
             context: ./_containers
             dockerfile: Dockerfile_cantaloupe
-        container_name: jacq_prc_iiif
+        container_name: jacq_prc_cantaloupe
         ports:
             - 8182:8182
+        depends_on:
+            - minio
         environment:
             HTTP_HTTP2_ENABLED: "true"
             HTTPS_HTTP2_ENABLED: "true"
@@ -65,14 +69,15 @@ services:
             S3CACHE_OBJECT_KEY_PREFIX: cache
             LOG_APPLICATION_LEVEL: warn
             LOG_ACCESS_CONSOLEAPPENDER_ENABLED: "true"
-#            SOURCE_STATIC: FilesystemSource
-#            FILESYSTEMSOURCE_BASICLOOKUPSTRATEGY_PATH_PREFIX: "/imageroot/"
-#        volumes:
-#            - ./data/cantaloupe/:/imageroot
+    #            SOURCE_STATIC: FilesystemSource
+    #            FILESYSTEMSOURCE_BASICLOOKUPSTRATEGY_PATH_PREFIX: "/imageroot/"
+    #        volumes:
+    #            - ./data/cantaloupe/:/imageroot
 
     minio:
         image: minio/minio
-        command: ["server", "--console-address", ":9001", "/data"]
+        container_name: jacq_prc_minio
+        command: [ "server", "--console-address", ":9001", "/data" ]
         ports:
             - 9000:9000
             - 9001:9001
@@ -82,7 +87,29 @@ services:
         volumes:
             - minio_storage:/data
 
-#    web:
+    viewer:
+        image: dockette/web:php-83
+        container_name: jacq_prc_viewer
+        depends_on:
+            - mariadb-viewer
+        environment:
+            NETTE_ENV: "development"
+        ports:
+            - 7080:80
+        volumes:
+            - ./viewer/htdocs:/srv/
+
+    mariadb-viewer:
+        image: mariadb:11
+        container_name: jacq_prc_db_viewer
+        environment:
+            MARIADB_ROOT_PASSWORD: root
+            MARIADB_USER: viewer
+            MARIADB_DATABASE: viewer
+            MARIADB_PASSWORD: viewer
+        volumes:
+            - mysql_viewer_storage:/var/lib/mysql
 
 volumes:
-    minio_storage: {}
+    minio_storage: { }
+    mysql_viewer_storage: { }

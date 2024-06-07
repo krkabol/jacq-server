@@ -1,9 +1,16 @@
 # jacq-server
+
+## TBD
+- limit ports
+- proxy for cantaloupe
+- Let's Encrypt
+
+## description
 deployment for herbarium2.natur.cuni.cz server including MariaDB replica and IIIF server
 
 - automatic updates - https://phoenixnap.com/kb/automatic-security-updates-ubuntu
 - require pubkey - https://www.linux.org/threads/how-to-force-ssh-login-via-public-key-authentication.8726/
--
+- limit open ports -
 
 ## MariaDB = replica of JACQ database_input
 * https://hub.docker.com/r/yidigun/mariadb-replication - vypadá nejlépe, podle něj postupováno
@@ -14,6 +21,7 @@ deployment for herbarium2.natur.cuni.cz server including MariaDB replica and III
 
 ## Cantaloupe = IIIF compliant server
 https://iiif.io/api/image/3.0/#21-image-request-uri-syntax
+https://training.iiif.io/intro-to-iiif/IIIF_MANIFESTS.html
 
 has UI, should be disabled/proxy (:8182/admin vs :8182/iiif)- https://training.iiif.io/intro-to-iiif/INSTALLING_CANTALOUPE.html
 for every image a info.json is downloaded https://training.iiif.io/intro-to-iiif/SOFTWARE.html, it contains dimension - so why to store it..?
@@ -31,13 +39,26 @@ http://www.sefidian.com/2022/04/08/deploy-standalone-minio-using-docker-compose/
 using prc_475443 and prc_475444 records as tester in bucket "prc".
 
 ## Mirador - IIIF viewer
+
+```shell
+# setup
+./composer.sh
+chmod -R 777 viewer/htdocs/temp viewer/htdocs/log
+```
 https://iiif.bgbm.org/
 https://services.jacq.org/jacq-services/rest/iiif/manifest/1681482
 https://presentation-validator.iiif.io/
-https://iiif.io/api/presentation/3.0/
+https://iiif.io/api/presentation/3.0/ | https://www.jacq.org/detail.php?ID=1681482
 
 http://iiif.bodleian.ox.ac.uk/manifest-editor/ - online editor for manifest (form https://training.iiif.io/intro-to-iiif/IIIF_MANIFESTS.html)
 
+**worflow**
+https://www.jacq.org/detail.php?ID=2087844 - shows a thumbnail via https://www.jacq.org/image.php?filename=prc_475443&sid=2087844&method=thumb
+and redirects to
+http://herbarium-prc.natur.cuni.cz/jacq-viewer/viewer.html?rft_id=prc_475443&identifiers=prc_475443,prc_475443a
+
+http://localhost:7080/iiif/manifest/prc_475443
+https://services.jacq.org/jacq-services/rest/iiif/manifest/1681482
 
 udělám malou nette app
 /iiif/$id - vrací Mirador, odkazuje vlastně jen na manifest
@@ -46,19 +67,6 @@ udělám malou nette app
 
 do budoucna tam může sedět i nějaká infopage k českým herbářům, vlastní vyhledávač jen nad PRC atp.
 a používat v3 https://iiif.io/api/presentation/3.0/change-log/
-```php
-    $latteParams = [
-        'variable' => 'Hello, this is a variable from Latte!'
-    ];
-
-spíše lépe mát uložený proformu jako .json, tu načíst s cahce a jen modifikovat dílčí aspekt
-    // Vytvoření Latte šablony
-    $latte = new Nette\Bridges\ApplicationLatte\LatteFactory;
-    $template = $latte->create()->renderToString(__DIR__ . '/templates/Api/default.latte', $latteParams);
-    $data = JSON:decode($template);
-
-    $this->sendResponse(new JsonResponse($data));
-```
 
 ## mount CESNET NFS
 https://du.cesnet.cz/cs/navody/nfs/start

@@ -1,0 +1,177 @@
+{
+  "@context": [
+    "http:\/\/iiif.io\/api\/presentation\/2\/context.json",
+    "http:\/\/www.w3.org\/ns\/anno.jsonld"
+  ],
+  "@type": "sc:Manifest",
+  "sequences": [
+    {
+      "@id": "https:\/\/services.jacq.org\/jacq-services\/rest\/iiif\/manifest\/1681482#sequence-1",
+      "@type": "sc:Sequence",
+      "canvases": [
+        {
+          "@id": "https:\/\/services.jacq.org\/jacq-services\/rest\/iiif\/manifest\/1681482\/c\/1681482_0",
+          "@type": "sc:Canvas",
+          "label": "KIEL0007001",
+          "height": 5472,
+          "width": 3648,
+          "images": [
+            {
+              "@id": "https:\/\/services.jacq.org\/jacq-services\/rest\/iiif\/manifest\/1681482\/i\/1681482_0",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https:\/\/services.jacq.org\/jacq-services\/rest\/iiif\/manifest\/1681482\/c\/1681482_0",
+              "resource": {
+                "@id": "https:\/\/jacq.bot.uni-kiel.de\/iiif\/2\/2020!201014!KIEL0007001.jp2",
+                "@type": "dctypes:Image",
+                "format": "image\/jpeg",
+                "height": 5472,
+                "width": 3648,
+                "service": {
+                  "@context": "http:\/\/iiif.io\/api\/image\/2\/context.json",
+                  "@id": "https:\/\/jacq.bot.uni-kiel.de\/iiif\/2\/2020!201014!KIEL0007001.jp2",
+                  "profile": "http:\/\/iiif.io\/api\/image\/2\/level2.json",
+                  "protocol": "http:\/\/iiif.io\/api\/image"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "label": "Current order",
+      "viewingDirection": "left-to-right"
+    }
+  ],
+  "thumbnail": {
+    "@id": "https:\/\/jacq.bot.uni-kiel.de\/iiif\/2\/2020!201014!KIEL0007001.jp2\/full\/400,\/0\/default.jpg",
+    "@type": "dctypes:Image",
+    "format": "image\/jpeg",
+    "service": {
+      "@context": "http:\/\/iiif.io\/api\/image\/2\/context.json",
+      "@id": "https:\/\/jacq.bot.uni-kiel.de\/iiif\/2\/2020!201014!KIEL0007001.jp2",
+      "profile": "http:\/\/iiif.io\/api\/image\/2\/level2.json",
+      "protocol": "http:\/\/iiif.io\/api\/image"
+    }
+  },
+  "@id": "http:\/\/services.jacq.org\/jacq-services\/rest\/iiif\/manifest\/1681482",
+  "description": "A PreservedSpecimen of Affonsea bullata Benth. collected by Luschnath,B.",
+  "label": "Affonsea bullata Benth.",
+  "attribution": "https:\/\/creativecommons.org\/licenses\/by\/4.0\/",
+  "logo": {
+    "@id": "https:\/\/www.uni-kiel.de\/typo3conf\/ext\/uni_kiel\/Resources\/Public\/Images\/Logo\/cau-norm-DE-lilagrey-rgb.svg"
+  },
+  "seeAlso": [
+    {
+      "@id": "https:\/\/kiel.jacq.org\/KIEL0007001",
+      "label": "RDF",
+      "format": "application\/rdf+xml",
+      "profile": "https:\/\/cetafidentifiers.biowikifarm.net\/wiki\/CSPP"
+    }
+  ],
+  "metadata": [
+    {
+      "label": "dc:title",
+      "value": "Affonsea bullata Benth."
+    },
+    {
+      "label": "dc:description",
+      "value": "A PreservedSpecimen of Affonsea bullata Benth. collected by Luschnath,B."
+    },
+    {
+      "label": "dc:creator",
+      "value": "Luschnath,B."
+    },
+    {
+      "label": "dc:created",
+      "value": "1838"
+    },
+    {
+      "label": "dc:type",
+      "value": "PreservedSpecimen"
+    },
+    {
+      "label": "dwc:materialSampleID",
+      "value": "<a href='https:\/\/kiel.jacq.org\/KIEL0007001'>https:\/\/kiel.jacq.org\/KIEL0007001<\/a>"
+    },
+    {
+      "label": "dwc:basisOfRecord",
+      "value": "PreservedSpecimen"
+    },
+    {
+      "label": "dwc:collectionCode",
+      "value": "KIEL"
+    },
+    {
+      "label": "dwc:catalogNumber",
+      "value": "0007001"
+    },
+    {
+      "label": "dwc:scientificName",
+      "value": "Affonsea bullata Benth."
+    },
+    {
+      "label": "dwc:previousIdentifications",
+      "value": "Affonsea bullata; Inga bullata"
+    },
+    {
+      "label": "dwc:family",
+      "value": "Mimosaceae"
+    },
+    {
+      "label": "dwc:genus",
+      "value": "Affonsea"
+    },
+    {
+      "label": "dwc:specificEpithet",
+      "value": "bullata"
+    },
+    {
+      "label": "dwc:country",
+      "value": "Brazil"
+    },
+    {
+      "label": "dwc:countryCode",
+      "value": "BRA"
+    },
+    {
+      "label": "dwc:locality",
+      "value": "."
+    },
+    {
+      "label": "dwc:eventDate",
+      "value": "1838"
+    },
+    {
+      "label": "dwc:recordNumber",
+      "value": "0007001"
+    },
+    {
+      "label": "dwc:recordedBy",
+      "value": "Luschnath,B."
+    },
+    {
+      "label": "dwc:fieldNumber",
+      "value": "s.n."
+    },
+    {
+      "label": "CETAF_ID",
+      "value": "<a href='https:\/\/kiel.jacq.org\/KIEL0007001'>https:\/\/kiel.jacq.org\/KIEL0007001<\/a>"
+    },
+    {
+      "label": "dwciri:recordedBy",
+      "value": "<a href='http:\/\/www.wikidata.org\/entity\/Q115484193'>http:\/\/www.wikidata.org\/entity\/Q115484193<\/a>"
+    },
+    {
+      "label": "owl:sameAs",
+      "value": "<a href='http:\/\/purl.oclc.org\/net\/edu.harvard.huh\/guid\/uuid\/878f80d0-203f-4699-b736-f1271556bb6b'>http:\/\/purl.oclc.org\/net\/edu.harvard.huh\/guid\/uuid\/878f80d0-203f-4699-b736-f1271556bb6b<\/a>"
+    },
+    {
+      "label": "owl:sameAs",
+      "value": "<a href='http:\/\/www.wikidata.org\/entity\/Q115484193'>http:\/\/www.wikidata.org\/entity\/Q115484193<\/a>"
+    },
+    {
+      "label": "owl:sameAs",
+      "value": "<a href='https:\/\/scholia.toolforge.org\/author\/Q115484193'>https:\/\/scholia.toolforge.org\/author\/Q115484193<\/a>"
+    }
+  ]
+}
