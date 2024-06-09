@@ -68,6 +68,9 @@ udělám malou nette app
 do budoucna tam může sedět i nějaká infopage k českým herbářům, vlastní vyhledávač jen nad PRC atp.
 a používat v3 https://iiif.io/api/presentation/3.0/change-log/
 
+
+https://services.jacq.org/jacq-services/rest/description/
+
 ## mount CESNET NFS
 https://du.cesnet.cz/cs/navody/nfs/start
 https://perun.cesnet.cz/fed/gui/#usr/info?id=59773&active=1;

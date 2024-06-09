@@ -9,7 +9,7 @@ class IiifManifest_v3
     public function __construct()
     {
         $filePath = '../app/Model/x.json';
-
+//https://services.jacq.org/jacq-services/rest/objects/specimens/1739342
         $this->default = json_decode(file_get_contents($filePath), true);
     }
 
