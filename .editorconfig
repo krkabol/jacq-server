@@ -10,6 +10,9 @@ indent_style = space
 indent_size = tab
 tab_width = 4
 
+[*.secret]
+insert_final_newline = false
+
 [{*.json, *.yaml, *.yml, *.md}]
 indent_style = space
 indent_size = 2
