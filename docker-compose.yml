@@ -37,7 +37,7 @@ services:
             ENDPOINT_IIIF_CONTENT_DISPOSITION: none
             SOURCE_STATIC: S3Source
             S3SOURCE_ENDPOINT: http://minio:9000
-            S3SOURCE_ACCESS_KEY_ID: /run/secrets/minio_key
+            S3SOURCE_ACCESS_KEY_ID: /run/secrets/minio_user
             S3SOURCE_SECRET_KEY: /run/secrets/minio_passwd
             S3SOURCE_BASICLOOKUPSTRATEGY_BUCKET_NAME: prc
             PROCESSOR_SELECTION_STRATEGY: ManualSelectionStrategy
