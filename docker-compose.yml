@@ -1,32 +1,30 @@
 services:
-#    proxy:
-#        image: steveltn/https-portal
-#        ports:
-#            - '80:80'
-#            - '443:443'
-#        restart: unless-stopped
-#        container_name: jacq_proxy
-#        links:
-#            - cantaloupe
-#        environment:
-#            DOMAINS: 'herbarium2.natur.cuni.cz -> http://cantaloupe:8182'
-#            CUSTOM_NGINX_HERBARIUM2_NATUR_CUNI_CZ_CONFIG_BLOCK: ' location /admin {
-#                                                                    deny all;
-#                                                                    return 403;
-#                                                                }'
-#            STAGE: 'local' # 'local' | 'production'
-#        #    FORCE_RENEW: 'true'
-#        volumes:
-#            - proxy_storage:/var/lib/https-portal
+    proxy:
+        image: steveltn/https-portal
+        ports:
+            - '80:80'
+            - '443:443'
+        restart: unless-stopped
+        container_name: jacq_proxy
+        links:
+            - cantaloupe
+        environment:
+            DOMAINS: 'herbarium2.natur.cuni.cz -> http://cantaloupe:8182'
+            CUSTOM_NGINX_HERBARIUM2_NATUR_CUNI_CZ_CONFIG_BLOCK: ' location /admin {
+                                                                    deny all;
+                                                                    return 403;
+                                                                }'
+            STAGE: 'local' # 'local' | 'production'
+        #    FORCE_RENEW: 'true'
+        volumes:
+            - proxy_storage:/var/lib/https-portal
 
     cantaloupe:
         build:
             context: containers
             dockerfile: Dockerfile_cantaloupe
+        restart: unless-stopped
         container_name: jacq_prc_cantaloupe
-        secrets:
-            - minio_user
-            - minio_passwd
         ports:
             - 8182:8182
         depends_on:
@@ -35,10 +33,11 @@ services:
             HTTP_HTTP2_ENABLED: "true"
             HTTPS_HTTP2_ENABLED: "true"
             ENDPOINT_IIIF_CONTENT_DISPOSITION: none
+            ENDPOINT_ADMIN_ENABLED: "false"
             SOURCE_STATIC: S3Source
             S3SOURCE_ENDPOINT: http://minio:9000
-            S3SOURCE_ACCESS_KEY_ID: /run/secrets/minio_user
-            S3SOURCE_SECRET_KEY: /run/secrets/minio_passwd
+            S3SOURCE_ACCESS_KEY_ID: ${S3_USER}
+            S3SOURCE_SECRET_KEY: ${S3_PASSWD}
             S3SOURCE_BASICLOOKUPSTRATEGY_BUCKET_NAME: prc
             PROCESSOR_SELECTION_STRATEGY: ManualSelectionStrategy
             PROCESSOR_MANUAL_SELECTIONSTRATEGY_JP2: OpenJpegProcessor
@@ -48,30 +47,24 @@ services:
             CACHE_SERVER_PURGE_MISSING: "true"
             CACHE_SERVER_WORKER_ENABLED: "true"
             S3CACHE_ENDPOINT: http://minio:9000
-            S3CACHE_ACCESS_KEY_ID: /run/secrets/minio_user
-            S3CACHE_SECRET_KEY: /run/secrets/minio_passwd
+            S3CACHE_ACCESS_KEY_ID: ${S3_USER}
+            S3CACHE_SECRET_KEY: ${S3_PASSWD}
             S3CACHE_BUCKET_NAME: images
             S3CACHE_OBJECT_KEY_PREFIX: cache
             LOG_APPLICATION_LEVEL: warn
-            LOG_ACCESS_CONSOLEAPPENDER_ENABLED: "true"
-    #            SOURCE_STATIC: FilesystemSource
-    #            FILESYSTEMSOURCE_BASICLOOKUPSTRATEGY_PATH_PREFIX: "/imageroot/"
-    #        volumes:
-    #            - ./data/cantaloupe/:/imageroot
+            LOG_ACCESS_CONSOLEAPPENDER_ENABLED: "false"
 
     minio:
         image: minio/minio
         container_name: jacq_prc_minio
-        secrets:
-            - minio_user
-            - minio_passwd
+        restart: unless-stopped
         command: [ "server", "--console-address", ":9001", "/data" ]
         ports:
             - 9000:9000
             - 9001:9001
         environment:
-            MINIO_ROOT_USER: /run/secrets/minio_user
-            MINIO_ROOT_PASSWORD: /run/secrets/minio_passwd
+            - MINIO_ROOT_USER=${S3_USER}
+            - MINIO_ROOT_PASSWORD=${S3_PASSWD}
         volumes:
             - minio_storage:/data
 
@@ -80,9 +73,6 @@ services:
 #        restart: unless-stopped
 #        container_name: jacq_prc_slave
 #        hostname: herbarium2.natur.cuni.cz
-#        secrets:
-#            - replicator_user
-#            - replicator_passwd
 #        ports:
 #            - "3306:3306"
 #        environment:
@@ -90,8 +80,8 @@ services:
 #            - LANG=de_AT.UTF-8
 #            - REPL_MODE=slave
 #            - REPL_SERVER_ID=10
-#            - REPL_USERNAME=/run/secrets/replicator_user
-#            - REPL_PASSWORD=/run/secrets/replicator_passwd
+#            - REPL_USERNAME=${xx}
+#            - REPL_PASSWORD=${xx}
 #            - REPL_MASTER_HOST=mariadb-master.jacq.com
 #            - REPL_MASTER_PORT=3306
 #        volumes:
@@ -113,10 +103,3 @@ services:
 volumes:
     minio_storage:
     proxy_storage:
-
-secrets:
-    minio_user:
-        file: containers/secrets/minio_user.secret
-    minio_passwd:
-        file: containers/secrets/minio_passwd.secret
-
