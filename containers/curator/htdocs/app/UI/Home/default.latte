@@ -1,3 +1,39 @@
 {block content}
-<h2>JACQ image service for the Czech Republic</h2>
-<p>Only for testing - <a n:href="Report:">report for PRC</a></p>
+<h2>JACQ image service for the Czech Republic TEST</h2>
+
+1. <a n:href=":initialize">Initialize</a> buckets and demo tiff data.
+<pre>
+    https://componette.org/ublaboo/aws-sdk-nette-extension/
+
+/archive - tiff archive files stored here like prc_475443a.tiff
+/iiif - jp2 files for Cantaloupe
+/new - a place where curators will upload new photos?
+</pre>
+
+2. <a n:href=":proceed">proceed</a> a pipeline for demo data
+<pre>
+    https://pipeline.thephpleague.com/usage/
+
+    convert
+    move
+    register in internal db - filename, URLlink, dimensions, specimen, herbarium
+    (check barcode-filename parity etc)
+</pre>
+
+3. <a n:href="Report:">report</a> newly added images as JACQ import table
+<pre>
+    ?data necessary for manifest.json - per herbarium or whole country..?
+</pre>
+
+<h4>links</h4>
+<ul>
+    <li><a href="http://localhost:9000">MinIO</a></li>
+    <li><a href="http://localhost:8182/iiif/2/prc_475444.jp2/full/300,/0/default.jpg">http://localhost:8182/iiif/2/prc_475444.jp2/full/300,/0/default.jpg</a></li>
+</ul>
+
+<hr>
+
+<h4>ideas</h4>
+<ul>
+    <li>proxy linking public to archive tiff file or ACL ?</li>
+</ul>

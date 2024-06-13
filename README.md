@@ -3,7 +3,7 @@ This is a preliminary solution for PRC herbarium interaction with JACQ build fro
 * proxy limiting access to public Cantaloupe interface + automatic management of certificates
 * Cantaloupe v5 image server with S3 data storage
 * MinIO as a demo storage with images prc_475443.jp2, prc_475443_a.jp2 and prc_475444.jp2
-* "curator" handle primary data management after uploaded by curators
+* web application Curator handles primary data management after uploaded from herbaria
 * tbd - replica
 
 ## run locally
