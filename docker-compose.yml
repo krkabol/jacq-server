@@ -5,19 +5,16 @@ services:
             - '80:80'
             - '443:443'
         restart: unless-stopped
-        container_name: jacq_proxy
+        container_name: jacq-proxy
         links:
             - cantaloupe
+            - curator
         environment:
             DOMAINS: 'herbarium2.natur.cuni.cz -> http://cantaloupe:8182'
-            CUSTOM_NGINX_HERBARIUM2_NATUR_CUNI_CZ_CONFIG_BLOCK: ' location /admin {
-                                                                    deny all;
-                                                                    return 403;
-                                                                }'
             STAGE: 'local' # 'local' | 'production'
-        #    FORCE_RENEW: 'true'
         volumes:
             - proxy_storage:/var/lib/https-portal
+            - ./containers/proxy/herbarium2.natur.cuni.cz.ssl.conf.erb:/var/lib/nginx-conf/herbarium2.natur.cuni.cz.ssl.conf.erb:ro
 
     cantaloupe:
         build:
@@ -54,6 +51,29 @@ services:
             LOG_APPLICATION_LEVEL: warn
             LOG_ACCESS_CONSOLEAPPENDER_ENABLED: "false"
 
+    curator:
+        image: dockette/web:php-83
+        container_name: jacq-curator
+        restart: unless-stopped
+        depends_on:
+            - curator-db
+        environment:
+            NETTE_ENV: "development"
+        volumes:
+            - ./containers/curator/htdocs:/srv/
+
+    curator-db:
+        image: mariadb:11
+        container_name: jacq-curator-db
+        restart: unless-stopped
+        environment:
+            MARIADB_ROOT_PASSWORD: ${CURATOR_ROOT_PASSWORD}
+            MARIADB_USER: curator
+            MARIADB_DATABASE: curator
+            MARIADB_PASSWORD: ${CURATOR_PASSWORD}
+        volumes:
+            - curator_db_storage:/var/lib/mysql
+
     minio:
         image: minio/minio
         container_name: jacq_prc_minio
@@ -71,7 +91,7 @@ services:
 #    mariadb-slave:
 #        image: yidigun/mariadb-replication:10.7
 #        restart: unless-stopped
-#        container_name: jacq_prc_slave
+#        container_name: jacq-prc-slave
 #        hostname: herbarium2.natur.cuni.cz
 #        ports:
 #            - "3306:3306"
@@ -103,3 +123,4 @@ services:
 volumes:
     minio_storage:
     proxy_storage:
+    curator_db_storage:
