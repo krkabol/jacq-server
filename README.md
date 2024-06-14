@@ -13,7 +13,7 @@ This is a preliminary solution for PRC herbarium interaction with JACQ build fro
     cd containers/curator
     ./composer.sh
     chmod -R 777 htdocs/log htdocs/temp
-    cp htdocs/config/local.neon.dist htdocs/config/local.neon
+    cp htdocs/config/local.neon.template htdocs/config/local.neon
     ```
 3) run Docker containers  ```docker compose up --build```
 4) login at http://localhost:9000 with credentials

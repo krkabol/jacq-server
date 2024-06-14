@@ -21,7 +21,7 @@ services:
             context: containers
             dockerfile: Dockerfile_cantaloupe
         restart: unless-stopped
-        container_name: jacq_prc_cantaloupe
+        container_name: jacq-cantaloupe
         ports:
             - 8182:8182
         depends_on:
@@ -76,7 +76,7 @@ services:
 
     minio:
         image: minio/minio
-        container_name: jacq_prc_minio
+        container_name: jacq_minio
         restart: unless-stopped
         command: [ "server", "--console-address", ":9001", "/data" ]
         ports:
