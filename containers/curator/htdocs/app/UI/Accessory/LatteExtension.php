@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace app\UI\Accessory;
 
 use Latte\Extension;
+use Nette\Utils\Html;
 
 
 final class LatteExtension extends Extension
 {
 	public function getFilters(): array
 	{
-		return [];
+		return ["status"=>[$this,"status"]];
 	}
 
 
@@ -19,4 +20,17 @@ final class LatteExtension extends Extension
 	{
 		return [];
 	}
+
+    public function status($status)
+    {
+        $el = Html::el("b");
+        if ($status === true) {
+            $el->style['color'] = 'green';
+            $el->setText("✓");
+        }else{
+            $el->style['color'] = 'red';
+            $el->setText("𐄂");
+        }
+        return $el;
+    }
 }

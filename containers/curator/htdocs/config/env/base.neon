@@ -30,3 +30,8 @@ application:
 
 di:
 	debugger: true
+
+aws:
+	region: eu-west-1
+	version: latest
+	use_aws_shared_config_files: false

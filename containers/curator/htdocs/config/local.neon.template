@@ -4,3 +4,9 @@ parameters:
 services:
     cacheStorage:
         factory: Nette\Caching\Storages\DevNullStorage
+
+aws:
+    endpoint: http://minio:9000
+    credentials:
+        key: minio
+        secret: password
