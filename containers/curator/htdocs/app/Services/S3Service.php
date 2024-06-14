@@ -10,7 +10,7 @@ use Aws\S3\S3Client;
 
 class S3Service
 {
-    public S3Client $s3;
+    private S3Client $s3;
 
     public function __construct(S3Client $s3)
     {

@@ -1,6 +1,7 @@
 services:
 	- App\Core\RouterFactory::createRouter
 	- App\Services\S3Service
+	- App\Services\TestService
 	- App\Services\WebDir(%wwwDir%)
 
 
