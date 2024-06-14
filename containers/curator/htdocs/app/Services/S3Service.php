@@ -26,6 +26,17 @@ class S3Service
         }
         return true;
     }
+
+    public function objectsExists(string $bucket, array $objects): bool
+    {
+        foreach ($objects as $object) {
+            if (!$this->s3->doesObjectExist($bucket, $object)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public function createBucket(string $name): void
     {
         try {
@@ -48,12 +59,26 @@ class S3Service
         return $this->s3->listBuckets();
     }
 
-    public function putObject()
+    public function putTiffIfNotExists(string $bucket, string $key, string $path): void
     {
-        $insert = $this->s3->putObject(['Bucket' => 'prc', 'Key' => 'testkey', 'Body' => 'Hello from MinIO!!']);
+        try {
+            $this->s3->headObject([
+                'Bucket' => $bucket,
+                'Key' => $key,
+            ]);
+        } catch (AwsException $e) {
+            if ($e->getStatusCode() === 404) {
+                $result = $this->s3->putObject([
+                    'Bucket' => $bucket,
+                    'Key' => $key,
+                    'SourceFile' => $path,
+                    'ContentType' => 'image/tiff']);
+            }
+        }
     }
 
-    public function getObject()
+    public
+    function getObject()
     {
         $retrive = $this->s3->getObject(['Bucket' => 'prc', 'Key' => 'testkey', 'SaveAs' => 'testkey_local']);
     }
