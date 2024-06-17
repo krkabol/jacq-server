@@ -24,7 +24,7 @@ final class LatteExtension extends Extension
     public function status($status)
     {
         $el = Html::el("b");
-        if ($status === true) {
+        if ($status == true) {
             $el->style['color'] = 'green';
             $el->setText("✓");
         }else{

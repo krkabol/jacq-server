@@ -3,6 +3,8 @@ services:
 	- App\Services\S3Service
 	- App\Services\TestService
 	- App\Services\WebDir(%wwwDir%)
+	- App\Services\TempDir(%tempDir%)
+	- App\Model\PhotoOfSpecimenFactory
 
 
 search:

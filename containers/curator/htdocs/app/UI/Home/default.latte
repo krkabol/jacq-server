@@ -15,12 +15,17 @@
 
 2. <a n:href=":proceed">proceed</a> a pipeline for demo data
 <pre>
-    https://pipeline.thephpleague.com/usage/
-
-    convert
-    move
-    register in internal db - filename, URLlink, dimensions, specimen, herbarium
-    (check barcode-filename parity etc)
+    <b>Existing:</b>
+            dimensions - read height and width from file {1|status}
+    <b>Planned:</b>
+            https://pipeline.thephpleague.com/usage/
+            initialize - get file, store in temp, keep imagick object {0|status}
+            convert {0|status}
+            dimensions {0|status}
+            move {0|status}
+            register in internal db - filename, URLlink, dimensions, specimen, herbarium {0|status}
+            (check barcode-filename parity etc {0|status})
+            cleanup temp file {0|status}
 </pre>
 
 3. <a n:href="Report:">report</a> newly added images as JACQ import table

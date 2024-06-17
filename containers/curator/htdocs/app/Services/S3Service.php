@@ -78,8 +78,11 @@ class S3Service
     }
 
     public
-    function getObject()
+    function getObject(string $bucket, string $key, string $path): Result
     {
-        $retrive = $this->s3->getObject(['Bucket' => 'prc', 'Key' => 'testkey', 'SaveAs' => 'testkey_local']);
+       return $this->s3->getObject([
+           'Bucket' => $bucket,
+           'Key' => $key,
+           'SaveAs' => $path]);
     }
 }

@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace app\Services;
 
+use app\Model\DimensionsStage;
 use app\Model\JP2Stage;
-use app\Model\PhotoOfSpecimen;
+use app\Model\PhotoOfSpecimenFactory;
 use app\UI\Home\HomePresenter;
 use League\Pipeline\Pipeline;
 
@@ -14,13 +15,16 @@ class TestService
     private S3Service $S3Service;
     private WebDir $webDir;
 
-    public function __construct(S3Service $S3Service, WebDir $webDir)
+    private PhotoOfSpecimenFactory $photoOfSpecimenFactory;
+
+    public function __construct(S3Service $S3Service, WebDir $webDir, PhotoOfSpecimenFactory $photoOfSpecimenFactory)
     {
          $this->S3Service = $S3Service;
          $this->webDir = $webDir;
+         $this->photoOfSpecimenFactory = $photoOfSpecimenFactory;
     }
 
-    public function initialize()
+    public function initialize(): void
     {
         foreach (HomePresenter::BUCKETS as $bucket) {
             $this->S3Service->createBucket($bucket);
@@ -32,13 +36,14 @@ class TestService
         }
     }
 
-    public function proceedPipeline()
+    public function proceedPipeline(): void
     {
         $pipeline = (new Pipeline())
-            ->pipe(new JP2Stage);
+            ->pipe(new JP2Stage)
+            ->pipe(new DimensionsStage);
 
         foreach (HomePresenter::TEST_FILES as $file) {
-            $pipeline->process(new PhotoOfSpecimen(HomePresenter::START_BUCKET, $file));
+            $pipeline->process($this->photoOfSpecimenFactory->create(HomePresenter::START_BUCKET, $file));
         }
 
     }
