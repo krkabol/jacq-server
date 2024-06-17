@@ -52,7 +52,9 @@ services:
             LOG_ACCESS_CONSOLEAPPENDER_ENABLED: "false"
 
     curator:
-        image: dockette/web:php-83
+        build:
+            context: containers
+            dockerfile: Dockerfile_curator
         container_name: jacq-curator
         restart: unless-stopped
         depends_on:
