@@ -37,7 +37,7 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 
     public function actionProceed()
     {
-        $this->testService->proceedPipeline();
+        $this->testService->proceedNewImages();
         $this->redirect(":default");
     }
 }

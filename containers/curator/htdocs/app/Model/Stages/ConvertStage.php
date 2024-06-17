@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace app\Model;
+namespace app\Model\Stages;
 
 
 use League\Pipeline\StageInterface;
 
-class JP2Stage implements StageInterface
+class ConvertStage implements StageInterface
 {
 
     public function __invoke($payload)

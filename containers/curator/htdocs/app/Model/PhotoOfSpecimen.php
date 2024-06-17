@@ -15,6 +15,8 @@ class PhotoOfSpecimen
     private S3Service $s3Service;
     private TempDir $tempDir;
 
+    private bool $isDownloaded = false;
+
     private int $height;
     private int $width;
 
@@ -25,12 +27,26 @@ class PhotoOfSpecimen
         $this->objectName = $objectName;
         $this->s3Service = $s3Service;
         $this->tempDir = $tempDir;
-        $this->s3Service->getObject($this->sourceBucket, $this->objectName, $this->getTempfile());
     }
 
     public function getTempfile()
     {
+        $this->downloadFromS3();
+        return $this->getTempfileName();
+    }
+
+    private function getTempfileName()
+    {
         return $this->tempDir->getPath($this->objectName);
+    }
+
+    public function downloadFromS3(): PhotoOfSpecimen
+    {
+        if (!$this->isDownloaded) {
+            $this->s3Service->getObject($this->sourceBucket, $this->objectName, $this->getTempfileName());
+            $this->isDownloaded = true;
+        }
+        return $this;
     }
 
     public function getHeight(): int
@@ -54,7 +70,4 @@ class PhotoOfSpecimen
         $this->width = $width;
         return $this;
     }
-
-
-
 }

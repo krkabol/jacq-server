@@ -2,23 +2,20 @@
 
 declare(strict_types=1);
 
-namespace app\Model;
+namespace app\Model\Stages;
 
-
-use app\Services\TempDir;
+use app\Model\PhotoOfSpecimen;
+use Imagick;
 use League\Pipeline\StageInterface;
 
 class DimensionsStage implements StageInterface
 {
-
     public function __invoke($payload)
     {
         /** @var PhotoOfSpecimen $payload */
-        $imagick = new \Imagick($payload->getTempfile());
+        $imagick = new Imagick($payload->getTempfile());
         $payload->setWidth($imagick->getImageWidth());
         $payload->setHeight($imagick->getImageHeight());
         return $payload;
     }
-
-
 }

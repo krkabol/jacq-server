@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace app\Services;
 
-use app\Model\DimensionsStage;
-use app\Model\JP2Stage;
 use app\Model\PhotoOfSpecimenFactory;
+use app\Model\Stages\BarcodeStage;
+use app\Model\Stages\ConvertStage;
+use app\Model\Stages\DimensionsStage;
+use app\Model\Stages\FilenameControlStage;
+use app\Model\Stages\FinalStage;
+use app\Model\Stages\InitialStage;
+use app\Model\Stages\RegisterStage;
 use app\UI\Home\HomePresenter;
 use League\Pipeline\Pipeline;
 
@@ -36,11 +41,16 @@ class TestService
         }
     }
 
-    public function proceedPipeline(): void
+    public function proceedNewImages(): void
     {
         $pipeline = (new Pipeline())
-            ->pipe(new JP2Stage)
-            ->pipe(new DimensionsStage);
+            ->pipe(new FilenameControlStage)
+            ->pipe(new InitialStage)
+            ->pipe(new ConvertStage)
+            ->pipe(new DimensionsStage)
+            ->pipe(new BarcodeStage)
+            ->pipe(new RegisterStage)
+            ->pipe(new FinalStage);
 
         foreach (HomePresenter::TEST_FILES as $file) {
             $pipeline->process($this->photoOfSpecimenFactory->create(HomePresenter::START_BUCKET, $file));
