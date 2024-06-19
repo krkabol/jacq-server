@@ -41,16 +41,24 @@ class TestService
         }
     }
 
+    protected function dryRunPipeline() : Pipeline {
+        return (new Pipeline())
+        ->pipe(new FilenameControlStage)
+        ->pipe(new InitialStage)
+        ->pipe(new ConvertStage)
+        ->pipe(new DimensionsStage)
+        ->pipe(new BarcodeStage);
+    }
+
+    protected function fullRunPipeline() : Pipeline {
+        return $this->dryRunPipeline()
+        ->pipe(new RegisterStage)
+        ->pipe(new FinalStage);
+    }
+
     public function proceedNewImages(): void
     {
-        $pipeline = (new Pipeline())
-            ->pipe(new FilenameControlStage)
-            ->pipe(new InitialStage)
-            ->pipe(new ConvertStage)
-            ->pipe(new DimensionsStage)
-            ->pipe(new BarcodeStage)
-            ->pipe(new RegisterStage)
-            ->pipe(new FinalStage);
+        $pipeline = $this->dryRunPipeline();
 
         foreach (HomePresenter::TEST_FILES as $file) {
             $pipeline->process($this->photoOfSpecimenFactory->create(HomePresenter::START_BUCKET, $file));

@@ -13,7 +13,7 @@ class DimensionsStage implements StageInterface
     public function __invoke($payload)
     {
         /** @var PhotoOfSpecimen $payload */
-        $imagick = new Imagick($payload->getTempfile());
+        $imagick = $payload->getImagick();
         $payload->setWidth($imagick->getImageWidth());
         $payload->setHeight($imagick->getImageHeight());
         return $payload;
