@@ -16,7 +16,8 @@ class ConvertStage implements StageInterface
          $imagick = $payload->getImagick();
          $imagick->setImageFormat('jp2');
          $imagick->writeImage($payload->getJP2Fullname());
-         $payload->putJP2();
+         $payload->putJP2();        
+         unlink($payload->getJP2Fullname());
         return $payload;
     }
 

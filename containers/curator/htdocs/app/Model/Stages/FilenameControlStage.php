@@ -32,7 +32,6 @@ class FilenameControlStage implements StageInterface
     $parts = [];
 
     if (preg_match(self::NAME_TEMPLATE, $this->item->getObjectName(), $parts)) {
-    
             $this->item->setHerbariumAcronym($parts['herbarium']);
             $this->item->setSpecimenId($parts['specimenId']);
     }else{

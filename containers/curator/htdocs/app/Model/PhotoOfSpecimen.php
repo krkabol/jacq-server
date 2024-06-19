@@ -113,6 +113,11 @@ class PhotoOfSpecimen
         return $this;
     }
 
+    public function getSpecimenId(): string
+    {
+        return $this->specimenId;
+    }
+
     public function setSpecimenId(string $id): PhotoOfSpecimen
     {
         $this->specimenId = $id;
