@@ -10,7 +10,6 @@ use app\Model\Stages\ConvertStage;
 use app\Model\Stages\DimensionsStage;
 use app\Model\Stages\FilenameControlStage;
 use app\Model\Stages\FinalStage;
-use app\Model\Stages\InitialStage;
 use app\Model\Stages\RegisterStage;
 use app\UI\Home\HomePresenter;
 use League\Pipeline\Pipeline;
@@ -44,21 +43,20 @@ class TestService
     protected function dryRunPipeline() : Pipeline {
         return (new Pipeline())
         ->pipe(new FilenameControlStage)
-        ->pipe(new InitialStage)
-        ->pipe(new ConvertStage)
         ->pipe(new DimensionsStage)
         ->pipe(new BarcodeStage);
     }
 
     protected function fullRunPipeline() : Pipeline {
         return $this->dryRunPipeline()
+        ->pipe(new ConvertStage)
         ->pipe(new RegisterStage)
         ->pipe(new FinalStage);
     }
 
     public function proceedNewImages(): void
     {
-        $pipeline = $this->dryRunPipeline();
+        $pipeline = $this->fullRunPipeline();
 
         foreach (HomePresenter::TEST_FILES as $file) {
             $pipeline->process($this->photoOfSpecimenFactory->create(HomePresenter::START_BUCKET, $file));

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace app\Model\Stages;
 
 use app\Model\PhotoOfSpecimen;
-use Imagick;
 use League\Pipeline\StageInterface;
 
 class DimensionsStage implements StageInterface

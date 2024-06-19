@@ -6,6 +6,7 @@ namespace app\Model;
 
 use app\Services\S3Service;
 use app\Services\TempDir;
+use app\UI\Home\HomePresenter;
 use Imagick;
 
 
@@ -57,13 +58,25 @@ class PhotoOfSpecimen
         return $this->objectName;
     }
 
-    public function downloadFromS3(): PhotoOfSpecimen
+    public function getJP2Fullname(): string{
+        return $this->tempDir->getPath($this->getJP2ObjectKey());
+    }
+
+    public function getJP2ObjectKey() : string {
+        return str_replace("tif", "jp2",$this->getObjectName());
+    }
+
+    private function downloadFromS3(): PhotoOfSpecimen
     {
         if (!$this->isDownloaded) {
             $this->s3Service->getObject($this->sourceBucket, $this->objectName, $this->getTempfileName());
             $this->isDownloaded = true;
         }
         return $this;
+    }
+
+    public function putJP2() : void {
+        $this->s3Service->putJP2Overwrite(HomePresenter::JP2_BUCKET,$this->getJP2ObjectKey(),$this->getJP2Fullname());
     }
 
     public function getHeight(): int

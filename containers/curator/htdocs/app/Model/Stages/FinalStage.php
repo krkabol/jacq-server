@@ -12,6 +12,7 @@ class FinalStage implements StageInterface
 
     public function __invoke($payload)
     {
+        //TODO delete tif+jp2 tem files, destroy imagick object
         return $payload;
     }
 

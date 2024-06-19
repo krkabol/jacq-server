@@ -77,6 +77,16 @@ class S3Service
         }
     }
 
+    public function putJP2Overwrite(string $bucket, string $key, string $path): void
+    {        
+                $result = $this->s3->putObject([
+                    'Bucket' => $bucket,
+                    'Key' => $key,
+                    'SourceFile' => $path,
+                    'ContentType' => 'image/jp2']);
+                   
+    }
+
     public
     function getObject(string $bucket, string $key, string $path): Result
     {
