@@ -1,5 +1,10 @@
 parameters:
     environment: 'development'
+    database:
+        host: curator-db
+        dbname: curator
+        user: curator
+        password: curator
 
 services:
     cacheStorage:
@@ -11,3 +16,4 @@ aws:
     credentials:
         key: minio
         secret: password
+

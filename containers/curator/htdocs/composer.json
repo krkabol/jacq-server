@@ -20,8 +20,15 @@
 		"latte/latte": "^3.0",
 		"tracy/tracy": "^2.10",
     "league/pipeline": "1.0.0",
-		"ublaboo/aws-sdk-nette-extension": "^1.1"
-	},
+		"ublaboo/aws-sdk-nette-extension": "^1.1",
+
+    "contributte/console": "^v0.9",
+    "contributte/console-extra": "^v0.7",
+    "nettrine/orm": "^0.8",
+    "nettrine/dbal": "^v0.8.2",
+    "nettrine/cache": "^0.3",
+    "nettrine/migrations": "^v0.9"
+  },
 	"require-dev": {
 		"nette/tester": "^2.5",
 		"symfony/thanks": "^1"

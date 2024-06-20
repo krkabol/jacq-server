@@ -1,1 +1,4 @@
 parameters:
+	database:
+		driver: pdo_mysql
+		port: 3306

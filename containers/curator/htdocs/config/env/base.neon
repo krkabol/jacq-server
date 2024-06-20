@@ -6,6 +6,8 @@ includes:
 
 	# Extensions
 	- ../ext/contributte.neon
+	- ../ext/ublaboo.neon
+	- ../ext/nettrine.neon
 
 php:
 	date.timezone: Europe/Prague

@@ -75,6 +75,7 @@ services:
             MARIADB_PASSWORD: ${CURATOR_PASSWORD}
         volumes:
             - curator_db_storage:/var/lib/mysql
+        command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
 
     minio:
         image: minio/minio
@@ -110,17 +111,19 @@ services:
 #            - ./data/slave_jacq/data:/var/lib/mysql
 #            - ./data/slave_jacq/log:/var/log/mysql
 #            - ./data/slave_jacq/run:/run/mysqld
-#    phpmyadmin:
-#        image: phpmyadmin
-#        container_name: jacq_prc_myadmin
-#        ports:
-#            - 8080:80
-#        depends_on:
-##            - mariadb-slave
-#        environment:
-#            - PMA_ARBITRARY=1
-#            - UPLOAD_LIMIT=10M
-#            - MAX_EXECUTION_TIME=6000
+
+    phpmyadmin:
+        image: phpmyadmin
+        container_name: jacq_prc_myadmin
+        ports:
+            - 8080:80
+        depends_on:
+#            - mariadb-slave
+            - curator-db
+        environment:
+            - PMA_ARBITRARY=1
+            - UPLOAD_LIMIT=10M
+            - MAX_EXECUTION_TIME=6000
 
 volumes:
     minio_storage:
