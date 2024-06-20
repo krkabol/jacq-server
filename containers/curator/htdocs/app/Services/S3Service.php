@@ -59,7 +59,7 @@ class S3Service
         return $this->s3->listBuckets();
     }
 
-    public function putTiffIfNotExists(string $bucket, string $key, string $path): void
+    public function putTiffIfNotExists(string $bucket, string $key, string $path): bool
     {
         try {
             $this->s3->headObject([
@@ -73,8 +73,35 @@ class S3Service
                     'Key' => $key,
                     'SourceFile' => $path,
                     'ContentType' => 'image/tiff']);
+                return true;
             }
         }
+        return false;
+    }
+
+    public function moveObjectIfNotExists(string $objectKey, string $sourceBucket, string $targetBucket): bool
+    {
+        try {
+            $this->s3->headObject([
+                'Bucket' => $sourceBucket,
+                'Key' => $objectKey,
+            ]);
+        } catch (AwsException $e) {
+            if ($e->getStatusCode() === 404) {
+                $this->s3->copyObject([
+                    'Bucket' => $targetBucket,
+                    'Key' => $objectKey,
+                    'CopySource' => "{$sourceBucket}/{$objectKey}",
+                ]);
+
+                $this->s3->deleteObject([
+                    'Bucket' => $sourceBucket,
+                    'Key' => $objectKey,
+                ]);
+                return true;
+            }
+        }
+        return false;
     }
 
     public function putJP2Overwrite(string $bucket, string $key, string $path): void

@@ -32,11 +32,11 @@ class FilenameControlStage implements StageInterface
 
         $parts = [];
 
-        if (preg_match(self::NAME_TEMPLATE, $this->item->getObjectName(), $parts)) {
+        if (preg_match(self::NAME_TEMPLATE, $this->item->getObjectKey(), $parts)) {
             $this->item->setHerbariumAcronym($parts['herbarium']);
             $this->item->setSpecimenId($parts['specimenId']);
         } else {
-            throw new FilenameControlException("invalid name format: " . $this->item->getObjectName());
+            throw new FilenameControlException("invalid name format: " . $this->item->getObjectKey());
         }
     }
 

@@ -14,7 +14,7 @@ class PhotoOfSpecimen
 {
 
     private string $sourceBucket;
-    private string $objectName;
+    private string $objectKey;
     private S3Service $s3Service;
     private TempDir $tempDir;
 
@@ -27,10 +27,10 @@ class PhotoOfSpecimen
     private string $specimenId;
 
 
-    public function __construct(string $bucket, string $objectName, S3Service $s3Service, TempDir $tempDir)
+    public function __construct(string $bucket, string $objectKey, S3Service $s3Service, TempDir $tempDir)
     {
         $this->sourceBucket = $bucket;
-        $this->objectName = $objectName;
+        $this->objectKey = $objectKey;
         $this->s3Service = $s3Service;
         $this->tempDir = $tempDir;
     }
@@ -53,7 +53,7 @@ class PhotoOfSpecimen
     private function downloadFromS3(): PhotoOfSpecimen
     {
         if (!$this->isDownloaded) {
-            $this->s3Service->getObject($this->sourceBucket, $this->objectName, $this->getTempfileName());
+            $this->s3Service->getObject($this->sourceBucket, $this->objectKey, $this->getTempfileName());
             $this->isDownloaded = true;
         }
         return $this;
@@ -61,12 +61,12 @@ class PhotoOfSpecimen
 
     private function getTempfileName()
     {
-        return $this->tempDir->getPath($this->getObjectName());
+        return $this->tempDir->getPath($this->getObjectKey());
     }
 
-    public function getObjectName(): string
+    public function getObjectKey(): string
     {
-        return $this->objectName;
+        return $this->objectKey;
     }
 
     public function putJP2(): void
@@ -74,9 +74,14 @@ class PhotoOfSpecimen
         $this->s3Service->putJP2Overwrite(HomePresenter::JP2_BUCKET, $this->getJP2ObjectKey(), $this->getJP2Fullname());
     }
 
+    public function putTiff(): void
+    {
+        $this->s3Service->moveObjectIfNotExists($this->getObjectKey(), HomePresenter::START_BUCKET, HomePresenter::ARCHIVE_BUCKET);
+    }
+
     public function getJP2ObjectKey(): string
     {
-        return str_replace("tif", "jp2", $this->getObjectName());
+        return str_replace("tif", "jp2", $this->getObjectKey());
     }
 
     public function getJP2Fullname(): string
@@ -126,6 +131,12 @@ class PhotoOfSpecimen
     public function setSpecimenId(string $id): PhotoOfSpecimen
     {
         $this->specimenId = $id;
+        return $this;
+    }
+
+    public function unsetImagick()
+    {
+        unset($this->imagick);
         return $this;
     }
 }

@@ -14,6 +14,7 @@ final class HomePresenter extends Nette\Application\UI\Presenter
     public const BUCKETS = ["archive", "iiif", "new"];
     public const START_BUCKET = "new";
     public const JP2_BUCKET = 'iiif';
+    public const ARCHIVE_BUCKET = 'archive';
     public const TEST_FILES = ["prc_407087.tif", "prc_407135.tif"];
 
     /** @inject */

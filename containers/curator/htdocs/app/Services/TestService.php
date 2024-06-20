@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace app\Services;
 
 use app\Model\PhotoOfSpecimenFactory;
+use app\Model\Stages\ArchiveStage;
 use app\Model\Stages\BarcodeStage;
 use app\Model\Stages\ConvertStage;
 use app\Model\Stages\DimensionsStage;
@@ -54,6 +55,7 @@ class TestService
     {
         return $this->dryRunPipeline()
             ->pipe(new ConvertStage)
+            ->pipe(new ArchiveStage)
             ->pipe(new RegisterStage)
             ->pipe(new CleanupStage);
     }

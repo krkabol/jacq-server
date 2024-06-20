@@ -54,7 +54,7 @@ class BarcodeStage implements StageInterface
             }
         }
         if (!$isValid) {
-            throw new BarcodeStageException("wrong barcode or image name: " . $this->item->getObjectName() . ". Detected code(s): " . implode($codes));
+            throw new BarcodeStageException("wrong barcode or image name: " . $this->item->getObjectKey() . ". Detected code(s): " . implode($codes));
         }
     }
 
