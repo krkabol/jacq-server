@@ -7,7 +7,8 @@ namespace app\Model\Stages;
 use app\Model\PhotoOfSpecimen;
 use League\Pipeline\StageInterface;
 
-class FilenameControlException extends BaseStageException {
+class FilenameControlException extends BaseStageException
+{
 
 }
 
@@ -26,26 +27,28 @@ class FilenameControlStage implements StageInterface
         return $this->item;
     }
 
-    private function splitName() : void
-     {
+    private function splitName(): void
+    {
 
-    $parts = [];
+        $parts = [];
 
-    if (preg_match(self::NAME_TEMPLATE, $this->item->getObjectName(), $parts)) {
+        if (preg_match(self::NAME_TEMPLATE, $this->item->getObjectName(), $parts)) {
             $this->item->setHerbariumAcronym($parts['herbarium']);
             $this->item->setSpecimenId($parts['specimenId']);
-    }else{
-        throw new FilenameControlException("invalid name format: ".$this->item->getObjectName());
-    }
-    }
-
-    private function checkAcronymExists() : void{
-        if(!in_array(strtolower($this->item->getHerbariumAcronym()), self::HERBARIA)){
-            throw new FilenameControlException("invalid herbarium acronym: ".$this->item->getHerbariumAcronym());
+        } else {
+            throw new FilenameControlException("invalid name format: " . $this->item->getObjectName());
         }
     }
 
-    private function checkSpecimenExists() : void{
+    private function checkAcronymExists(): void
+    {
+        if (!in_array(strtolower($this->item->getHerbariumAcronym()), self::HERBARIA)) {
+            throw new FilenameControlException("invalid herbarium acronym: " . $this->item->getHerbariumAcronym());
+        }
+    }
+
+    private function checkSpecimenExists(): void
+    {
         // TODO - will we ask JACQ API? - because it is possible to have a specimen with photo not yet included in JACQ I expect..
     }
 

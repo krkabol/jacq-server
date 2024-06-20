@@ -7,7 +7,7 @@ namespace app\Model\Stages;
 
 use League\Pipeline\StageInterface;
 
-class FinalStage implements StageInterface
+class CleanupStage implements StageInterface
 {
 
     public function __invoke($payload)

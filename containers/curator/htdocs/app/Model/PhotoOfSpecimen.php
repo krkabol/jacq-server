@@ -35,35 +35,19 @@ class PhotoOfSpecimen
         $this->tempDir = $tempDir;
     }
 
+    public function getImagick(): Imagick
+    {
+        if ($this->imagick === null) {
+            $this->imagick = new Imagick($this->getTempfile());
+        }
+
+        return $this->imagick;
+    }
+
     public function getTempfile()
     {
         $this->downloadFromS3();
         return $this->getTempfileName();
-    }
-
-    public function getImagick() : Imagick {
-        if ($this->imagick === null){        
-            $this->imagick = new Imagick($this->getTempfile());
-        }
-        
-        return $this->imagick;
-    }
-
-    private function getTempfileName()
-    {
-        return $this->tempDir->getPath($this->getObjectName());
-    }
-
-    public function getObjectName() : string {
-        return $this->objectName;
-    }
-
-    public function getJP2Fullname(): string{
-        return $this->tempDir->getPath($this->getJP2ObjectKey());
-    }
-
-    public function getJP2ObjectKey() : string {
-        return str_replace("tif", "jp2",$this->getObjectName());
     }
 
     private function downloadFromS3(): PhotoOfSpecimen
@@ -75,8 +59,29 @@ class PhotoOfSpecimen
         return $this;
     }
 
-    public function putJP2() : void {
-        $this->s3Service->putJP2Overwrite(HomePresenter::JP2_BUCKET,$this->getJP2ObjectKey(),$this->getJP2Fullname());
+    private function getTempfileName()
+    {
+        return $this->tempDir->getPath($this->getObjectName());
+    }
+
+    public function getObjectName(): string
+    {
+        return $this->objectName;
+    }
+
+    public function putJP2(): void
+    {
+        $this->s3Service->putJP2Overwrite(HomePresenter::JP2_BUCKET, $this->getJP2ObjectKey(), $this->getJP2Fullname());
+    }
+
+    public function getJP2ObjectKey(): string
+    {
+        return str_replace("tif", "jp2", $this->getObjectName());
+    }
+
+    public function getJP2Fullname(): string
+    {
+        return $this->tempDir->getPath($this->getJP2ObjectKey());
     }
 
     public function getHeight(): int
@@ -100,7 +105,7 @@ class PhotoOfSpecimen
         $this->width = $width;
         return $this;
     }
-    
+
 
     public function getHerbariumAcronym(): string
     {

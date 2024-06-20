@@ -3,16 +3,19 @@
 
 namespace app\Services;
 
-class WebDir {
+class WebDir
+{
 
     private $wwwDir;
 
-    public function __construct($wwwDir) {
+    public function __construct($wwwDir)
+    {
         $this->wwwDir = $wwwDir;
     }
 
-    public function getPath($fromBaseDir=''){
-        return $this->wwwDir.DIRECTORY_SEPARATOR.$fromBaseDir;
+    public function getPath($fromBaseDir = '')
+    {
+        return $this->wwwDir . DIRECTORY_SEPARATOR . $fromBaseDir;
     }
 
 }

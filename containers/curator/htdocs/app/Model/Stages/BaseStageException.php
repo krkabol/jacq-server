@@ -6,6 +6,7 @@ namespace app\Model\Stages;
 
 use Nette\Neon\Exception;
 
-class BaseStageException extends Exception {
+class BaseStageException extends Exception
+{
 
 }
