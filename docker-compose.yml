@@ -75,6 +75,7 @@ services:
             MARIADB_PASSWORD: ${CURATOR_PASSWORD}
         volumes:
             - curator_db_storage:/var/lib/mysql
+#            - ./data/curator-db:/var/lib/mysql #for production
         command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
 
     minio:
