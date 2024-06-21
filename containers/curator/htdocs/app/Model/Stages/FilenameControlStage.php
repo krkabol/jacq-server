@@ -29,9 +29,7 @@ class FilenameControlStage implements StageInterface
 
     private function splitName(): void
     {
-
         $parts = [];
-
         if (preg_match(self::NAME_TEMPLATE, $this->item->getObjectKey(), $parts)) {
             $this->item->setHerbariumAcronym($parts['herbarium']);
             $this->item->setSpecimenId($parts['specimenId']);

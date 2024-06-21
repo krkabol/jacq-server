@@ -7,13 +7,13 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'herbaria')]
+#[ORM\Table(name: 'herbaria', options:["comment"=>"List of involved herbaria"])]
 class Herbaria
 {
 
     use TId;
 
-    #[ORM\Column(unique: true, nullable: false)]
+    #[ORM\Column(unique: true, nullable: false, options:["comment"=>"Acronym of herbarium according to Index Herbariorum"])]
     protected string $acronym;
 
     #[ORM\OneToMany(targetEntity: "Photos", mappedBy: "herbarium")]

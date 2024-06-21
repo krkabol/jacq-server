@@ -67,10 +67,10 @@ class Photos extends \app\Model\Database\Entity\Photos implements \Doctrine\ORM\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'filename', 'width', 'height', 'specimenId', 'herbarium', 'finalized', '' . "\0" . 'app\\Model\\Database\\Entity\\Photos' . "\0" . 'id'];
+            return ['__isInitialized__', 'archiveFilename', 'herbarium', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'finalized', '' . "\0" . 'app\\Model\\Database\\Entity\\Photos' . "\0" . 'id', 'createdAt'];
         }
 
-        return ['__isInitialized__', 'filename', 'width', 'height', 'specimenId', 'herbarium', 'finalized', '' . "\0" . 'app\\Model\\Database\\Entity\\Photos' . "\0" . 'id'];
+        return ['__isInitialized__', 'archiveFilename', 'herbarium', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'finalized', '' . "\0" . 'app\\Model\\Database\\Entity\\Photos' . "\0" . 'id', 'createdAt'];
     }
 
     /**
@@ -182,12 +182,12 @@ class Photos extends \app\Model\Database\Entity\Photos implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
-    public function setFilename(string $filename): \app\Model\Database\Entity\Photos
+    public function setArchiveFilename(string $archiveFilename): \app\Model\Database\Entity\Photos
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFilename', [$filename]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setArchiveFilename', [$archiveFilename]);
 
-        return parent::setFilename($filename);
+        return parent::setArchiveFilename($archiveFilename);
     }
 
     /**
@@ -248,6 +248,28 @@ class Photos extends \app\Model\Database\Entity\Photos implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
+    public function setArchiveFileSize(?int $archiveFileSize): \app\Model\Database\Entity\Photos
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setArchiveFileSize', [$archiveFileSize]);
+
+        return parent::setArchiveFileSize($archiveFileSize);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setJP2FileSize(?int $JP2FileSize): \app\Model\Database\Entity\Photos
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setJP2FileSize', [$JP2FileSize]);
+
+        return parent::setJP2FileSize($JP2FileSize);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getId(): int
     {
         if ($this->__isInitialized__ === false) {
@@ -258,6 +280,28 @@ class Photos extends \app\Model\Database\Entity\Photos implements \Doctrine\ORM\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCreatedAt()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreatedAt', []);
+
+        return parent::getCreatedAt();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCreatedAt()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreatedAt', []);
+
+        return parent::setCreatedAt();
     }
 
 }

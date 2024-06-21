@@ -90,6 +90,15 @@ class S3Service
         return false;
     }
 
+    public function getObjectSize(string $bucket, string $key): int
+    {
+        $result = $this->s3->headObject([
+            'Bucket' => $bucket,
+            'Key'    => $key,
+        ]);
+        return $result['ContentLength'];
+    }
+
     public function deleteObject(string $bucket, string $key)
     {
         $this->s3->deleteObject([

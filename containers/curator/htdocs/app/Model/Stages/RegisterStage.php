@@ -40,11 +40,14 @@ class RegisterStage implements StageInterface
         $entity = new Photos();
         $herbarium = $this->entityManager->getHerbariaRepository()->findOneByAcronym($payload->getHerbariumAcronym());
         $entity
-            ->setFilename($payload->getObjectKey())
+            ->setCreatedAt()
+            ->setArchiveFilename($payload->getObjectKey())
             ->setFinalized(true)
             ->setHerbarium($herbarium)
             ->setHeight($payload->getHeight())
             ->setWidth($payload->getWidth())
+            ->setArchiveFileSize($payload->getTiffSize())
+            ->setJP2FileSize($payload->getJp2Size())
             ->setSpecimenId($payload->getSpecimenId());
 
         $this->entityManager->persist($entity);

@@ -2,36 +2,45 @@
 
 namespace app\Model\Database\Entity;
 
+use app\Model\Database\Entity\Attributes\TCreatedAt;
 use app\Model\Database\Entity\Attributes\TId;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'photos')]
+#[ORM\Table(name: 'photos', options:["comment"=>"Specimen photos"])]
 class Photos
 {
 
     use TId;
+    use TCreatedAt;
 
-    #[ORM\Column(unique: true, nullable: false)]
-    protected string $filename;
-
-    #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    protected ?int $width;
-    #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    protected ?int $height;
-    #[ORM\Column(type: Types::STRING, nullable: true)]
-    protected ?string $specimenId;
+    #[ORM\Column(unique: true, nullable: false, options:["comment"=>"Filename of Archive Master TIF file"])]
+    protected string $archiveFilename;
 
     #[ORM\ManyToOne(targetEntity: "Herbaria", inversedBy: "photos")]
-    #[ORM\JoinColumn(name: "herbarium_id", referencedColumnName: "id")]
+    #[ORM\JoinColumn(name: "herbarium_id", referencedColumnName: "id", options:["comment"=>"Herbarium storing and managing the specimen data"])]
     protected Herbaria $herbarium;
-    #[ORM\Column(type: Types::BOOLEAN, nullable: false)]
+
+    #[ORM\Column(type: Types::STRING, nullable: true, options:["comment"=>"Herbarium internal unique id of specimen in form without herbarium acronym"])]
+    protected ?string $specimenId;
+
+    #[ORM\Column(type: Types::INTEGER, nullable: true, options:["comment"=>"Width of image with pixels"])]
+    protected ?int $width;
+    #[ORM\Column(type: Types::INTEGER, nullable: true, options:["comment"=>"Height of image in pixels"])]
+    protected ?int $height;
+
+    #[ORM\Column(type: Types::BIGINT, nullable: true, options:["comment"=>"Filesize of Archive Master TIFF file in bytes"])]
+    protected ?int $archiveFileSize;
+
+    #[ORM\Column(type: Types::BIGINT, nullable: true, options:["comment"=>"Filesize of converted JP2 file in bytes"])]
+    protected ?int $JP2FileSize;
+    #[ORM\Column(type: Types::BOOLEAN, nullable: false, options:["comment"=>"Flag with not finally usage decided yet"])]
     protected bool $finalized = false;
 
-    public function setFilename(string $filename): Photos
+    public function setArchiveFilename(string $archiveFilename): Photos
     {
-        $this->filename = $filename;
+        $this->archiveFilename = $archiveFilename;
         return $this;
     }
 
@@ -65,5 +74,15 @@ class Photos
         return $this;
     }
 
+    public function setArchiveFileSize(?int $archiveFileSize): Photos
+    {
+        $this->archiveFileSize = $archiveFileSize;
+        return $this;
+    }
 
+    public function setJP2FileSize(?int $JP2FileSize): Photos
+    {
+        $this->JP2FileSize = $JP2FileSize;
+        return $this;
+    }
 }

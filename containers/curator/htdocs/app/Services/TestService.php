@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace app\Services;
 
 use app\Model\PhotoOfSpecimenFactory;
-use app\Model\Stages\ArchiveStage;
 use app\Model\Stages\BarcodeStage;
 use app\Model\Stages\BaseStageException;
-use app\Model\Stages\CleanupStage;
-use app\Model\Stages\ConvertStage;
 use app\Model\Stages\DimensionsStage;
 use app\Model\Stages\FilenameControlStage;
 use app\Model\Stages\StageFactory;
@@ -64,8 +61,8 @@ class TestService
     protected function fileProcessingPipeline(): Pipeline
     {
         return $this->controlPipeline()
-            ->pipe(new ConvertStage)
-            ->pipe(new ArchiveStage)
+            ->pipe($this->stageFactory->createConvertStage())
+            ->pipe($this->stageFactory->createArchiveStage())
             ->pipe($this->stageFactory->createRegisterStage())
             ->pipe($this->stageFactory->createCleanupStage());
     }
@@ -75,7 +72,7 @@ class TestService
         return (new Pipeline())
             ->pipe(new FilenameControlStage)
             ->pipe($this->stageFactory->createNoveltyControlStage())
-            ->pipe(new DimensionsStage)
+            ->pipe($this->stageFactory->createDimensionsStage())
             ->pipe(new BarcodeStage);
     }
 }

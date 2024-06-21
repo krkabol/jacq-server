@@ -35,8 +35,6 @@ follow wisely previous section +
 ## TODO
 
 ### curator
-* store tif+jp2 file size
-* store timestamp_imported
 * modify regex to accept "_a" suffix style
 * pipeline for iiif/archive bucket postcontrol
 * plot tiff filesize, jp2 filesize

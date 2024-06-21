@@ -28,13 +28,17 @@ class BarcodeStage implements StageInterface
 
     private function createContrastedImage(): void
     {
-        $imagick = new \Imagick($this->item->getTempfile());
-        $imagick->modulateImage(100, 0, 100);
-        $imagick->whiteThresholdImage('#a9a9a9');
-        $imagick->contrastImage(true);
-        $imagick->setImageFormat('jpg');
-        $imagick->writeImage($this->getContrastTempFileName());
-        unset($imagick);
+        try {
+            $imagick = new \Imagick($this->item->getTempfile());
+            $imagick->modulateImage(100, 0, 100);
+            $imagick->whiteThresholdImage('#a9a9a9');
+            $imagick->contrastImage(true);
+            $imagick->setImageFormat('jpg');
+            $imagick->writeImage($this->getContrastTempFileName());
+            unset($imagick);
+        } catch (\Exception $exception) {
+            throw new BarcodeStageException($exception->getMessage());
+        }
     }
 
     private function getContrastTempFileName(): string

@@ -23,6 +23,8 @@ class PhotoOfSpecimen
 
     private int $height;
     private int $width;
+    private int $jp2Size;
+    private int $tiffSize;
     private string $herbariumAcronym;
     private string $specimenId;
 
@@ -67,16 +69,6 @@ class PhotoOfSpecimen
     public function getObjectKey(): string
     {
         return $this->objectKey;
-    }
-
-    public function putJP2(): void
-    {
-        $this->s3Service->putJP2Overwrite(HomePresenter::JP2_BUCKET, $this->getJP2ObjectKey(), $this->getJP2Fullname());
-    }
-
-    public function putArchiveTiff(): void
-    {
-        $this->s3Service->copyObjectIfNotExists($this->getObjectKey(), HomePresenter::START_BUCKET, HomePresenter::ARCHIVE_BUCKET);
     }
 
     public function getJP2ObjectKey(): string
@@ -139,4 +131,28 @@ class PhotoOfSpecimen
         unset($this->imagick);
         return $this;
     }
+
+    public function getJp2Size(): int
+    {
+        return $this->jp2Size;
+    }
+
+    public function setJp2Size(int $jp2Size): PhotoOfSpecimen
+    {
+        $this->jp2Size = $jp2Size;
+        return $this;
+    }
+
+    public function getTiffSize(): int
+    {
+        return $this->tiffSize;
+    }
+
+    public function setTiffSize(int $tiffSize): PhotoOfSpecimen
+    {
+        $this->tiffSize = $tiffSize;
+        return $this;
+    }
+
+
 }
