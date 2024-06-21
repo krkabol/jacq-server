@@ -25,7 +25,7 @@ class StageFactory
 
     public function createNoveltyControlStage(): NoveltyControlStage
     {
-        return new NoveltyControlStage( $this->s3Service);
+        return new NoveltyControlStage($this->s3Service);
     }
 
     public function createRegisterStage(): RegisterStage

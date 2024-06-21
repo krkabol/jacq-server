@@ -37,9 +37,10 @@ final class HomePresenter extends Nette\Application\UI\Presenter
         $this->redirect(":default");
     }
 
-    public function actionProceed()
+    public function renderProceed()
     {
-        $this->testService->proceedNewImages();
-        $this->redirect(":default");
+        $result = $this->testService->proceedNewImages();
+        $this->template->success = $result[0];
+        $this->template->error = $result[1];
     }
 }

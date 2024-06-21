@@ -7,12 +7,11 @@ namespace app\Services;
 use app\Model\PhotoOfSpecimenFactory;
 use app\Model\Stages\ArchiveStage;
 use app\Model\Stages\BarcodeStage;
+use app\Model\Stages\BaseStageException;
+use app\Model\Stages\CleanupStage;
 use app\Model\Stages\ConvertStage;
 use app\Model\Stages\DimensionsStage;
 use app\Model\Stages\FilenameControlStage;
-use app\Model\Stages\CleanupStage;
-use app\Model\Stages\NoveltyControlStage;
-use app\Model\Stages\RegisterStage;
 use app\Model\Stages\StageFactory;
 use app\UI\Home\HomePresenter;
 use League\Pipeline\Pipeline;
@@ -45,26 +44,34 @@ class TestService
         }
     }
 
-    public function proceedNewImages(): void
+    public function proceedNewImages(): array
     {
-        $pipeline = $this->fullRunPipeline();
-
+        $pipeline = $this->fileProcessingPipeline();
+        $success = [];
+        $error = [];
         foreach (HomePresenter::TEST_FILES as $file) {
-            $pipeline->process($this->photoOfSpecimenFactory->create(HomePresenter::START_BUCKET, $file));
+            try {
+                $photo = $this->photoOfSpecimenFactory->create(HomePresenter::START_BUCKET, $file);
+                $pipeline->process($photo);
+                $success[$file] = "OK";
+            } catch (BaseStageException $e) {
+                $error[$file] = $e->getMessage();
+            }
         }
+        return [$success, $error];
 
     }
 
-    protected function fullRunPipeline(): Pipeline
+    protected function fileProcessingPipeline(): Pipeline
     {
-        return $this->dryRunPipeline()
+        return $this->controlPipeline()
             ->pipe(new ConvertStage)
             ->pipe(new ArchiveStage)
             ->pipe($this->stageFactory->createRegisterStage())
             ->pipe(new CleanupStage);
     }
 
-    protected function dryRunPipeline(): Pipeline
+    protected function controlPipeline(): Pipeline
     {
         return (new Pipeline())
             ->pipe(new FilenameControlStage)
