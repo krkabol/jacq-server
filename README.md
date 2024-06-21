@@ -35,9 +35,9 @@ follow wisely previous section +
 ## TODO
 
 ### curator
-* modify regex to accept "_a" suffix style
 * pipeline for iiif/archive bucket postcontrol
 * plot tiff filesize, jp2 filesize
-* route for specimen id - provide lis of images
+* route for specimen id - provide list of images
 * route proxy tif image from S3
-*
+* available herbaria read from db
+* * transform into webapp with authorization

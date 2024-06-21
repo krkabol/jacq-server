@@ -14,7 +14,7 @@ class FilenameControlException extends BaseStageException
 
 class FilenameControlStage implements StageInterface
 {
-    const NAME_TEMPLATE = '/^(?P<herbarium>[a-zA-Z]+)_(?P<specimenId>\d+)\.(?P<extension>tif)$/';
+    const NAME_TEMPLATE = '/^(?P<herbarium>[a-zA-Z]+)_(?P<specimenId>\d+)(?P<supplement>[_\-a-zA-Z]*)\.(?P<extension>tif)$/';
     const HERBARIA = ["prc"];
     private PhotoOfSpecimen $item;
 
