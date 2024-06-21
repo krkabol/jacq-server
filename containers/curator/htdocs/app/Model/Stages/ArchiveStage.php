@@ -19,7 +19,7 @@ class ArchiveStage implements StageInterface
     {
         try {
             /** @var PhotoOfSpecimen $payload */
-            $payload->putTiff();
+            $payload->putArchiveTiff();
         }catch (\Exception $exception){
             throw new ArchiveStageException("tiff upload error (".$exception->getMessage()."): ".$payload->getObjectKey());
         }

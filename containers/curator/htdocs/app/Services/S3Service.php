@@ -77,7 +77,7 @@ class S3Service
         return false;
     }
 
-    public function moveObjectIfNotExists(string $objectKey, string $sourceBucket, string $targetBucket): bool
+    public function copyObjectIfNotExists(string $objectKey, string $sourceBucket, string $targetBucket): bool
     {
         if (!$this->s3->doesObjectExist($targetBucket, $objectKey)) {
             $this->s3->copyObject([
@@ -85,14 +85,17 @@ class S3Service
                 'Key' => $objectKey,
                 'CopySource' => "{$sourceBucket}/{$objectKey}",
             ]);
-
-            $this->s3->deleteObject([
-                'Bucket' => $sourceBucket,
-                'Key' => $objectKey,
-            ]);
             return true;
         }
         return false;
+    }
+
+    public function deleteObject(string $bucket, string $key)
+    {
+        $this->s3->deleteObject([
+            'Bucket' => $bucket,
+            'Key' => $key,
+        ]);
     }
 
     public function putJP2Overwrite(string $bucket, string $key, string $path): void

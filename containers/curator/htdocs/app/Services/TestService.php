@@ -59,7 +59,6 @@ class TestService
             }
         }
         return [$success, $error];
-
     }
 
     protected function fileProcessingPipeline(): Pipeline
@@ -68,7 +67,7 @@ class TestService
             ->pipe(new ConvertStage)
             ->pipe(new ArchiveStage)
             ->pipe($this->stageFactory->createRegisterStage())
-            ->pipe(new CleanupStage);
+            ->pipe($this->stageFactory->createCleanupStage());
     }
 
     protected function controlPipeline(): Pipeline

@@ -36,7 +36,6 @@ follow wisely previous section +
 
 ### curator
 * store tif+jp2 file size
-* delete new/xx.tif later, after register stage
 * store timestamp_imported
 * modify regex to accept "_a" suffix style
 * pipeline for iiif/archive bucket postcontrol

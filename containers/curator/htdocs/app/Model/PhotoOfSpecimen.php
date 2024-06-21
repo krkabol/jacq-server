@@ -74,9 +74,9 @@ class PhotoOfSpecimen
         $this->s3Service->putJP2Overwrite(HomePresenter::JP2_BUCKET, $this->getJP2ObjectKey(), $this->getJP2Fullname());
     }
 
-    public function putTiff(): void
+    public function putArchiveTiff(): void
     {
-        $this->s3Service->moveObjectIfNotExists($this->getObjectKey(), HomePresenter::START_BUCKET, HomePresenter::ARCHIVE_BUCKET);
+        $this->s3Service->copyObjectIfNotExists($this->getObjectKey(), HomePresenter::START_BUCKET, HomePresenter::ARCHIVE_BUCKET);
     }
 
     public function getJP2ObjectKey(): string

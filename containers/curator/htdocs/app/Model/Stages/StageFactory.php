@@ -33,4 +33,9 @@ class StageFactory
         return new RegisterStage($this->entityManager);
     }
 
+    public function createCleanupStage(): CleanupStage
+    {
+        return new CleanupStage($this->s3Service);
+    }
+
 }
