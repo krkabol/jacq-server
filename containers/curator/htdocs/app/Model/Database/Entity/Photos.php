@@ -22,8 +22,12 @@ class Photos
     protected ?int $height;
     #[ORM\Column(type: Types::STRING, nullable: true)]
     protected ?string $specimenId;
-    #[ORM\Column(type: Types::STRING, nullable: true)]
-    protected ?string $herbarium;
+
+    #[ORM\ManyToOne(targetEntity: "Herbaria", inversedBy: "photos")]
+    #[ORM\JoinColumn(name: "herbarium_id", referencedColumnName: "id")]
+    protected Herbaria $herbarium;
+    #[ORM\Column(type: Types::BOOLEAN, nullable: false)]
+    protected bool $finalized = false;
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     protected ?string $msg;
 

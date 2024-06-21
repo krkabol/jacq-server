@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
 namespace app\Model\Database;
+use app\Model\Database\Entity\Herbaria;
 use app\Model\Database\Entity\Photos;
-use App\Model\UserRepository;
 
 /**
  * @mixin EntityManager
@@ -10,9 +10,14 @@ use App\Model\UserRepository;
 trait TRepositories
 {
 
-    public function getUserRepository(): UserRepository
+    public function getPhotosRepository()
     {
         return $this->getRepository(Photos::class);
+    }
+
+    public function getHerbariaRepository()
+    {
+        return $this->getRepository(Herbaria::class);
     }
 
 }

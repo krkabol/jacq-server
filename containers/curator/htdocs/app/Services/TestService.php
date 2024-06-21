@@ -11,7 +11,9 @@ use app\Model\Stages\ConvertStage;
 use app\Model\Stages\DimensionsStage;
 use app\Model\Stages\FilenameControlStage;
 use app\Model\Stages\CleanupStage;
+use app\Model\Stages\NoveltyControlStage;
 use app\Model\Stages\RegisterStage;
+use app\Model\Stages\StageFactory;
 use app\UI\Home\HomePresenter;
 use League\Pipeline\Pipeline;
 
@@ -21,12 +23,14 @@ class TestService
     private WebDir $webDir;
 
     private PhotoOfSpecimenFactory $photoOfSpecimenFactory;
+    private StageFactory $stageFactory;
 
-    public function __construct(S3Service $S3Service, WebDir $webDir, PhotoOfSpecimenFactory $photoOfSpecimenFactory)
+    public function __construct(S3Service $S3Service, WebDir $webDir, PhotoOfSpecimenFactory $photoOfSpecimenFactory, StageFactory $stageFactory)
     {
         $this->S3Service = $S3Service;
         $this->webDir = $webDir;
         $this->photoOfSpecimenFactory = $photoOfSpecimenFactory;
+        $this->stageFactory = $stageFactory;
     }
 
     public function initialize(): void
@@ -56,7 +60,7 @@ class TestService
         return $this->dryRunPipeline()
             ->pipe(new ConvertStage)
             ->pipe(new ArchiveStage)
-            ->pipe(new RegisterStage)
+            ->pipe($this->stageFactory->createRegisterStage())
             ->pipe(new CleanupStage);
     }
 
@@ -64,6 +68,7 @@ class TestService
     {
         return (new Pipeline())
             ->pipe(new FilenameControlStage)
+            ->pipe($this->stageFactory->createNoveltyControlStage())
             ->pipe(new DimensionsStage)
             ->pipe(new BarcodeStage);
     }

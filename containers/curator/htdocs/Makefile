@@ -1,3 +1,4 @@
+#docker exec -it --user dfx jacq-curator /bin/bash
  build:
  	NETTE_DEBUG=1 bin/console migrations:generate #  generate empty migration class
  	NETTE_DEBUG=1 bin/console migrations:diff # generate  migration class according to entities

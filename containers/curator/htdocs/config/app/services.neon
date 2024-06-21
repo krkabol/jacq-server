@@ -6,6 +6,7 @@ services:
 	- App\Services\WebDir(%wwwDir%)
 	- App\Services\TempDir(%tempDir%)
 	- App\Model\PhotoOfSpecimenFactory
+	- App\Model\Stages\StageFactory
 
 
 search:

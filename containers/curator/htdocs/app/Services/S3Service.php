@@ -7,6 +7,7 @@ namespace app\Services;
 use Aws\Exception\AwsException;
 use Aws\Result;
 use Aws\S3\S3Client;
+use Nette\Neon\Exception;
 
 class S3Service
 {
@@ -27,6 +28,14 @@ class S3Service
         return true;
     }
 
+    public function objectExists(string $bucket, string $object): bool
+    {
+        if (!$this->s3->doesObjectExist($bucket, $object)) {
+            return false;
+        }
+        return true;
+    }
+
     public function objectsExists(string $bucket, array $objects): bool
     {
         foreach ($objects as $object) {
@@ -39,18 +48,14 @@ class S3Service
 
     public function createBucket(string $name): void
     {
-        try {
-            $result = $this->s3->headBucket(['Bucket' => $name,]);
-        } catch (AwsException $e) {
-            if ($e->getStatusCode() == 404) {
-                try {
-                    $result = $this->s3->createBucket(['Bucket' => $name,]);
-                } catch (AwsException $e) {
-                    die("Error during bucket create: " . $e->getMessage() . "\n");
-                }
-            } else {
-                die("Error during bucket head: " . $e->getMessage() . "\n");
+        if (!$this->s3->doesBucketExist($name)) {
+            try {
+                $result = $this->s3->createBucket(['Bucket' => $name,]);
+            } catch (AwsException $e) {
+                die("Error during bucket create: " . $e->getMessage() . "\n");
             }
+        } else {
+            throw new Exception("Bucket already exists");
         }
     }
 
@@ -61,45 +66,31 @@ class S3Service
 
     public function putTiffIfNotExists(string $bucket, string $key, string $path): bool
     {
-        try {
-            $this->s3->headObject([
+        if (!$this->s3->doesObjectExist($bucket, $key)) {
+            $result = $this->s3->putObject([
                 'Bucket' => $bucket,
                 'Key' => $key,
-            ]);
-        } catch (AwsException $e) {
-            if ($e->getStatusCode() === 404) {
-                $result = $this->s3->putObject([
-                    'Bucket' => $bucket,
-                    'Key' => $key,
-                    'SourceFile' => $path,
-                    'ContentType' => 'image/tiff']);
-                return true;
-            }
+                'SourceFile' => $path,
+                'ContentType' => 'image/tiff']);
+            return true;
         }
         return false;
     }
 
     public function moveObjectIfNotExists(string $objectKey, string $sourceBucket, string $targetBucket): bool
     {
-        try {
-            $this->s3->headObject([
+        if (!$this->s3->doesObjectExist($targetBucket, $objectKey)) {
+            $this->s3->copyObject([
+                'Bucket' => $targetBucket,
+                'Key' => $objectKey,
+                'CopySource' => "{$sourceBucket}/{$objectKey}",
+            ]);
+
+            $this->s3->deleteObject([
                 'Bucket' => $sourceBucket,
                 'Key' => $objectKey,
             ]);
-        } catch (AwsException $e) {
-            if ($e->getStatusCode() === 404) {
-                $this->s3->copyObject([
-                    'Bucket' => $targetBucket,
-                    'Key' => $objectKey,
-                    'CopySource' => "{$sourceBucket}/{$objectKey}",
-                ]);
-
-                $this->s3->deleteObject([
-                    'Bucket' => $sourceBucket,
-                    'Key' => $objectKey,
-                ]);
-                return true;
-            }
+            return true;
         }
         return false;
     }
