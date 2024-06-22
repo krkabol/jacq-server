@@ -12,6 +12,11 @@ final class StorageConfiguration
         $this->config = $config;
     }
 
+    public function getAllBuckets(): array
+    {
+        return [$this->getNewBucket(), $this->getArchiveBucket(), $this->getJP2Bucket()];
+    }
+
     public function getNewBucket(): string
     {
         return $this->config['newBucket'];
@@ -27,9 +32,9 @@ final class StorageConfiguration
         return $this->config['jp2Bucket'];
     }
 
-    public function getAllBuckets(): array
-{
-        return [$this->getNewBucket(), $this->getArchiveBucket(), $this->getJP2Bucket()];
-   }
+    public function getJP2Quality(): int
+    {
+        return $this->config['jp2Quality'];
+    }
 
 }

@@ -6,3 +6,4 @@ parameters:
         archiveBucket: archive
         jp2Bucket: iiif
         newBucket: new
+        jp2Quality: 46

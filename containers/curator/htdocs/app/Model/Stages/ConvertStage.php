@@ -33,9 +33,12 @@ class ConvertStage implements StageInterface
         try {
             $imagick = $payload->getImagick();
             $imagick->setImageFormat('jp2');
+            $imagick->setCompressionQuality($this->configuration->getJP2Quality());
             $imagick->writeImage($payload->getJP2Fullname());
+
             $this->s3Service->putJP2Overwrite($this->configuration->getJP2Bucket(), $payload->getJP2ObjectKey(), $payload->getJP2Fullname());
             $payload->setJp2Size($this->s3Service->getObjectSize($this->configuration->getJP2Bucket(), $payload->getJP2ObjectKey()));
+
             unlink($payload->getJP2Fullname());
         } catch (Exception $exception) {
             throw new ConvertStageException("unable convert to JP2 (" . $exception->getMessage() . "): " . $payload->getObjectKey());
