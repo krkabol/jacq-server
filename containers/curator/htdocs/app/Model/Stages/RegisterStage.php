@@ -37,7 +37,7 @@ class RegisterStage implements StageInterface
             $payload->setJp2Size($this->s3Service->getObjectSize($this->configuration->getJP2Bucket(), $this->configuration->getJP2ObjectKey($payload->getObjectKey())));
             $payload->setTiffSize($this->s3Service->getObjectSize($this->configuration->getArchiveBucket(), $payload->getObjectKey()));
             if ($this->entityManager->getPhotosRepository()->findOneByArchiveFilename($payload->getObjectKey()) !== null) {
-                throw new RegisterStageException("db unique constraint/duplicate entry: " . $payload->getObjectKey());
+                throw new RegisterStageException("already registred file (?): " . $payload->getObjectKey());
             }
             $this->writeRecord($payload);
         } catch (RegisterStageException $exception) {

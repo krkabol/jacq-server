@@ -7,13 +7,13 @@ namespace app\Services;
 use app\Model\PhotoOfSpecimenFactory;
 use app\Model\Stages\BarcodeStage;
 use app\Model\Stages\BaseStageException;
-use app\Model\Stages\FilenameControlStage;
 use app\Model\Stages\StageFactory;
 use app\UI\Home\HomePresenter;
 use League\Pipeline\Pipeline;
 
 class TestService
 {
+    const LIMIT = 100;
     protected S3Service $S3Service;
     protected WebDir $webDir;
 
@@ -76,5 +76,39 @@ class TestService
             ->pipe($this->stageFactory->createNoveltyControlStage())
             ->pipe($this->stageFactory->createDimensionsStage())
             ->pipe(new BarcodeStage);
+    }
+
+    public function proceedExistingImages(): array
+    {
+        $pipeline = $this->migrationPipeline();
+        $success = [];
+        $error = [];
+        $files = $this->S3Service->listObjects($this->storageConfiguration->getArchiveBucket());
+        $i = 0;
+        foreach ($files as $file) {
+            try {
+                $photo = $this->photoOfSpecimenFactory->create($this->storageConfiguration->getArchiveBucket(), $file);
+                $pipeline->process($photo);
+                $success[$file] = "OK";
+                $i++;
+            } catch (BaseStageException $e) {
+                $error[$file] = $e->getMessage();
+            }
+            if ($i >= self::LIMIT) {
+                break;
+            }
+        }
+        return [$success, $error];
+    }
+
+    protected function migrationPipeline(): Pipeline
+    {
+        return (new Pipeline())
+            ->pipe($this->stageFactory->createNotInDatabaseStage())
+            ->pipe($this->stageFactory->createFilenameControlStage())
+            ->pipe($this->stageFactory->createDimensionsStage())
+            ->pipe(new BarcodeStage)
+            ->pipe($this->stageFactory->createRegisterStage())
+            ->pipe($this->stageFactory->createCleanupStage());
     }
 }

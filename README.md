@@ -34,5 +34,4 @@ follow wisely previous section +
 ## TODO
 
 ### curator
-* pipeline for iiif/archive bucket postcontrol
 * transform into real webapp with authorization

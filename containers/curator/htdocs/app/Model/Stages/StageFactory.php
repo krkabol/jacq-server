@@ -31,6 +31,11 @@ class StageFactory
         return new NoveltyControlStage($this->s3Service, $this->storageConfiguration);
     }
 
+    public function createNotInDatabaseStage(): NotInDatabaseStage
+    {
+        return new NotInDatabaseStage($this->entityManager);
+    }
+
     public function createRegisterStage(): RegisterStage
     {
         return new RegisterStage($this->entityManager, $this->storageConfiguration, $this->s3Service);
