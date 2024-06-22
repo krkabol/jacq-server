@@ -13,22 +13,22 @@ use Imagick;
 class PhotoOfSpecimen
 {
 
-    private string $sourceBucket;
-    private string $objectKey;
-    private S3Service $s3Service;
-    private TempDir $tempDir;
+    protected string $sourceBucket;
+    protected string $objectKey;
+    protected S3Service $s3Service;
+    protected TempDir $tempDir;
 
     protected StorageConfiguration $storageConfiguration;
 
-    private bool $isDownloaded = false;
-    private ?Imagick $imagick = null;
+    protected bool $isDownloaded = false;
+    protected ?Imagick $imagick = null;
 
-    private int $height;
-    private int $width;
-    private int $jp2Size;
-    private int $tiffSize;
-    private string $herbariumAcronym;
-    private string $specimenId;
+    protected int $height;
+    protected int $width;
+    protected int $jp2Size;
+    protected int $tiffSize;
+    protected string $herbariumAcronym;
+    protected string $specimenId;
 
 
     public function __construct(string $bucket, string $objectKey, S3Service $s3Service, TempDir $tempDir, StorageConfiguration $storageConfiguration)
@@ -55,7 +55,7 @@ class PhotoOfSpecimen
         return $this->getTempfileName();
     }
 
-    private function downloadFromS3(): PhotoOfSpecimen
+    protected function downloadFromS3(): PhotoOfSpecimen
     {
         if (!$this->isDownloaded) {
             $this->s3Service->getObject($this->sourceBucket, $this->objectKey, $this->getTempfileName());
@@ -64,7 +64,7 @@ class PhotoOfSpecimen
         return $this;
     }
 
-    private function getTempfileName()
+    protected function getTempfileName()
     {
         return $this->tempDir->getPath($this->getObjectKey());
     }

@@ -17,8 +17,8 @@ class ConvertStageException extends BaseStageException
 
 class ConvertStage implements StageInterface
 {
-    private S3Service $s3Service;
-    private StorageConfiguration $configuration;
+    protected S3Service $s3Service;
+    protected StorageConfiguration $configuration;
 
     public function __construct(S3Service $s3Service, StorageConfiguration $configuration)
     {

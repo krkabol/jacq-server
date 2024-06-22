@@ -16,7 +16,7 @@ class FilenameControlStage implements StageInterface
 {
     const NAME_TEMPLATE = '/^(?P<herbarium>[a-zA-Z]+)_(?P<specimenId>\d+)(?P<supplement>[_\-a-zA-Z]*)\.(?P<extension>tif)$/';
     const HERBARIA = ["prc"];
-    private PhotoOfSpecimen $item;
+    protected PhotoOfSpecimen $item;
 
     public function __invoke($payload)
     {
@@ -27,7 +27,7 @@ class FilenameControlStage implements StageInterface
         return $this->item;
     }
 
-    private function splitName(): void
+    protected function splitName(): void
     {
         $parts = [];
         if (preg_match(self::NAME_TEMPLATE, $this->item->getObjectKey(), $parts)) {
@@ -38,14 +38,14 @@ class FilenameControlStage implements StageInterface
         }
     }
 
-    private function checkAcronymExists(): void
+    protected function checkAcronymExists(): void
     {
         if (!in_array(strtolower($this->item->getHerbariumAcronym()), self::HERBARIA)) {
             throw new FilenameControlException("invalid herbarium acronym: " . $this->item->getHerbariumAcronym());
         }
     }
 
-    private function checkSpecimenExists(): void
+    protected function checkSpecimenExists(): void
     {
         // TODO - will we ask JACQ API? - because it is possible to have a specimen with photo not yet included in JACQ I expect..
     }

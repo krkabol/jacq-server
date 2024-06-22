@@ -10,8 +10,8 @@ use app\Services\TempDir;
 class PhotoOfSpecimenFactory
 {
 
-    private S3Service $s3Service;
-    private TempDir $tempDir;
+    protected S3Service $s3Service;
+    protected TempDir $tempDir;
 
 
     public function __construct(S3Service $s3Service, TempDir $tempDir)

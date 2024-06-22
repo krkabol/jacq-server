@@ -12,10 +12,10 @@ use app\Services\TempDir;
 class StageFactory
 {
 
-    private S3Service $s3Service;
-    private TempDir $tempDir;
-    private EntityManager $entityManager;
-    private StorageConfiguration $storageConfiguration;
+    protected S3Service $s3Service;
+    protected TempDir $tempDir;
+    protected EntityManager $entityManager;
+    protected StorageConfiguration $storageConfiguration;
 
 
     public function __construct(S3Service $s3Service, TempDir $tempDir, EntityManager $entityManager, StorageConfiguration $storageConfiguration)

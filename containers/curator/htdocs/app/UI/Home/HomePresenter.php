@@ -7,10 +7,10 @@ namespace app\UI\Home;
 use app\Services\S3Service;
 use app\Services\StorageConfiguration;
 use app\Services\TestService;
-use Nette;
+use Nette\Application\UI\Presenter;
 
 
-final class HomePresenter extends Nette\Application\UI\Presenter
+final class HomePresenter extends Presenter
 {
     public const TEST_FILES = ["prc_407087.tif", "prc_407135.tif"];
 

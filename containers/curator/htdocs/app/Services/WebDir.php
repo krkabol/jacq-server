@@ -6,7 +6,7 @@ namespace app\Services;
 class WebDir
 {
 
-    private $wwwDir;
+    protected $wwwDir;
 
     public function __construct($wwwDir)
     {

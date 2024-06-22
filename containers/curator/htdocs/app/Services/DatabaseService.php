@@ -9,7 +9,8 @@ use App\Model\Database\EntityManager;
 
 class DatabaseService
 {
-   private EntityManager $entityManager;
+    private EntityManager $entityManager;
+
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;

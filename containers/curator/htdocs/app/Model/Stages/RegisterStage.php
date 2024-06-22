@@ -34,7 +34,7 @@ class RegisterStage implements StageInterface
         return $payload;
     }
 
-    private function writeRecord($payload)
+    protected function writeRecord($payload)
     {
         /** @var PhotoOfSpecimen $payload */
         $entity = new Photos();

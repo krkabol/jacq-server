@@ -14,13 +14,13 @@ use League\Pipeline\Pipeline;
 
 class TestService
 {
-    private S3Service $S3Service;
-    private WebDir $webDir;
+    protected S3Service $S3Service;
+    protected WebDir $webDir;
 
-    private PhotoOfSpecimenFactory $photoOfSpecimenFactory;
-    private StageFactory $stageFactory;
+    protected PhotoOfSpecimenFactory $photoOfSpecimenFactory;
+    protected StageFactory $stageFactory;
 
-    private StorageConfiguration $storageConfiguration;
+    protected StorageConfiguration $storageConfiguration;
 
     public function __construct(S3Service $S3Service, WebDir $webDir, PhotoOfSpecimenFactory $photoOfSpecimenFactory, StageFactory $stageFactory, StorageConfiguration $storageConfiguration)
     {

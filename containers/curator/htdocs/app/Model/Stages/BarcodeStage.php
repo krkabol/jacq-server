@@ -15,7 +15,7 @@ class BarcodeStageException extends BaseStageException
 class BarcodeStage implements StageInterface
 {
     const BARCODE_TEMPLATE = '/^(?P<herbarium>[a-zA-Z]+)[ _-]+(?P<specimenId>\d+)$/';
-    private PhotoOfSpecimen $item;
+    protected PhotoOfSpecimen $item;
 
     public function __invoke($payload)
     {
@@ -26,7 +26,7 @@ class BarcodeStage implements StageInterface
         return $this->item;
     }
 
-    private function createContrastedImage(): void
+    protected function createContrastedImage(): void
     {
         try {
             $imagick = new \Imagick($this->item->getTempfile());
@@ -41,12 +41,12 @@ class BarcodeStage implements StageInterface
         }
     }
 
-    private function getContrastTempFileName(): string
+    protected function getContrastTempFileName(): string
     {
         return $this->item->getTempfile() . "barcode";
     }
 
-    private function validateFilename(): void
+    protected function validateFilename(): void
     {
         $isValid = false;
         $codes = $this->detectCodes();
@@ -64,7 +64,7 @@ class BarcodeStage implements StageInterface
         }
     }
 
-    private function detectCodes(): array
+    protected function detectCodes(): array
     {
         $output = [];
         $returnVar = 0;

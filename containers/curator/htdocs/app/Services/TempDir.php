@@ -5,7 +5,7 @@ namespace app\Services;
 class TempDir
 {
 
-    private $dir;
+    protected $dir;
 
     public function __construct($dir)
     {
