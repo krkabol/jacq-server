@@ -4,10 +4,10 @@
 <a n:href=":default">back to main</a>
 
 <h3>success</h3>
-<pre>{foreach $success as $file => $msg}
-{1|status} {$file}: {$msg}{/foreach}
-</pre>
+    <pre>{foreach $success as $file => $msg}
+    {1|status} {$file}: {$msg}{/foreach}
+    </pre>
 <h3>error</h3>
-<pre>{foreach $error as $file=>$msg}
-{0|status} {$file}: {$msg}{/foreach}
-</pre>
+    <pre>{foreach $error as $file=>$msg}
+    {0|status} {$file}: {$msg}{/foreach}
+    </pre>

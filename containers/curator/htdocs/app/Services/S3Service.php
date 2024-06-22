@@ -94,7 +94,7 @@ class S3Service
     {
         $result = $this->s3->headObject([
             'Bucket' => $bucket,
-            'Key'    => $key,
+            'Key' => $key,
         ]);
         return $result['ContentLength'];
     }
@@ -117,12 +117,24 @@ class S3Service
 
     }
 
-    public
-    function getObject(string $bucket, string $key, string $path): Result
+    public function getObject(string $bucket, string $key, string $path): Result
     {
         return $this->s3->getObject([
             'Bucket' => $bucket,
             'Key' => $key,
             'SaveAs' => $path]);
+    }
+
+    public function listObjects(string $bucket): array
+    {
+        $objects = [];
+        $result = $this->s3->getIterator('ListObjects', array(
+            "Bucket" => $bucket,
+           // "Prefix" => 'some_folder/'
+        ));
+        foreach ($result as $object) {
+            $objects[] = $object['Key'];
+        }
+        return $objects;
     }
 }
