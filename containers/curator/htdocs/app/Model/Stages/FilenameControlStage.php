@@ -15,8 +15,13 @@ class FilenameControlException extends BaseStageException
 class FilenameControlStage implements StageInterface
 {
     const NAME_TEMPLATE = '/^(?P<herbarium>[a-zA-Z]+)_(?P<specimenId>\d+)(?P<supplement>[_\-a-zA-Z]*)\.(?P<extension>tif)$/';
-    const HERBARIA = ["prc"];
+    protected $herbariaAvailable;
     protected PhotoOfSpecimen $item;
+
+    public function __construct($herbariaAvailable)
+    {
+        $this->herbariaAvailable = $herbariaAvailable;
+    }
 
     public function __invoke($payload)
     {
@@ -40,7 +45,7 @@ class FilenameControlStage implements StageInterface
 
     protected function checkAcronymExists(): void
     {
-        if (!in_array(strtolower($this->item->getHerbariumAcronym()), self::HERBARIA)) {
+        if (!in_array(strtoupper($this->item->getHerbariumAcronym()), $this->herbariaAvailable)) {
             throw new FilenameControlException("invalid herbarium acronym: " . $this->item->getHerbariumAcronym());
         }
     }

@@ -55,4 +55,10 @@ class StageFactory
     {
         return new DimensionsStage($this->s3Service, $this->storageConfiguration);
     }
+    public function createFilenameControlStage(): FilenameControlStage
+    {
+        $result = $this->entityManager->createQuery("SELECT a.acronym FROM app\Model\Database\Entity\Herbaria a")->getScalarResult();
+        $herbariaAvailable = array_column($result, "acronym");
+        return new FilenameControlStage($herbariaAvailable);
+    }
 }

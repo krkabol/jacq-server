@@ -72,7 +72,7 @@ class TestService
     protected function controlPipeline(): Pipeline
     {
         return (new Pipeline())
-            ->pipe(new FilenameControlStage)
+            ->pipe($this->stageFactory->createFilenameControlStage())
             ->pipe($this->stageFactory->createNoveltyControlStage())
             ->pipe($this->stageFactory->createDimensionsStage())
             ->pipe(new BarcodeStage);
