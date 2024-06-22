@@ -24,7 +24,6 @@ class RegisterStage implements StageInterface
     protected S3Service $s3Service;
 
 
-
     public function __construct(EntityManager $entityManager, StorageConfiguration $configuration, S3Service $s3Service)
     {
         $this->entityManager = $entityManager;
@@ -36,7 +35,13 @@ class RegisterStage implements StageInterface
     {
         try {
             $payload->setJp2Size($this->s3Service->getObjectSize($this->configuration->getJP2Bucket(), $this->configuration->getJP2ObjectKey($payload->getObjectKey())));
-            $this->writeRecord($payload);;
+            $payload->setTiffSize($this->s3Service->getObjectSize($this->configuration->getArchiveBucket(), $payload->getObjectKey()));
+            if ($this->entityManager->getPhotosRepository()->findOneByArchiveFilename($payload->getObjectKey()) !== null) {
+                throw new RegisterStageException("db unique constraint/duplicate entry: " . $payload->getObjectKey());
+            }
+            $this->writeRecord($payload);
+        } catch (RegisterStageException $exception) {
+            throw $exception;
         } catch (\Exception $exception) {
             throw new RegisterStageException("db write error (" . $exception->getMessage() . "): " . $payload->getObjectKey());
         }
@@ -62,6 +67,4 @@ class RegisterStage implements StageInterface
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
     }
-
-
 }

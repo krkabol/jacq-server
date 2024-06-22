@@ -32,7 +32,6 @@ class DimensionsStage implements StageInterface
             $imagick = $payload->getImagick();
             $payload->setWidth($imagick->getImageWidth());
             $payload->setHeight($imagick->getImageHeight());
-            $payload->setTiffSize($this->s3Service->getObjectSize($this->configuration->getNewBucket(), $payload->getObjectKey()));
         } catch (\Exception $exception) {
             throw new DimensionStageException("dimensions error (" . $exception->getMessage() . "): " . $payload->getObjectKey());
         }

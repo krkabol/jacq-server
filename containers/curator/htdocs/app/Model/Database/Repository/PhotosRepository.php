@@ -14,9 +14,9 @@ use app\Model\Database\Entity\Photos;
 class PhotosRepository extends AbstractRepository
 {
 
-	public function findOneByKey(string $key): ?Photos
+	public function findOneByArchiveFilename(string $archiveFilename): ?Photos
 	{
-		return $this->findOneBy(['key' => $key]);
+		return $this->findOneBy(['archiveFilename' => $archiveFilename]);
 	}
 
 }
