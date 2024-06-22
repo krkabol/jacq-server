@@ -35,3 +35,6 @@ follow wisely previous section +
 
 ### curator
 * transform into real webapp with authorization
+* try to get curator on the GitHub Registry - separate curator and deployment
+* write a report on GDrive
+* 
