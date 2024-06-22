@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace app\Model;
 
 use app\Services\S3Service;
+use app\Services\StorageConfiguration;
 use app\Services\TempDir;
 use Imagick;
 
@@ -17,6 +18,8 @@ class PhotoOfSpecimen
     private S3Service $s3Service;
     private TempDir $tempDir;
 
+    protected StorageConfiguration $storageConfiguration;
+
     private bool $isDownloaded = false;
     private ?Imagick $imagick = null;
 
@@ -28,12 +31,13 @@ class PhotoOfSpecimen
     private string $specimenId;
 
 
-    public function __construct(string $bucket, string $objectKey, S3Service $s3Service, TempDir $tempDir)
+    public function __construct(string $bucket, string $objectKey, S3Service $s3Service, TempDir $tempDir, StorageConfiguration $storageConfiguration)
     {
         $this->sourceBucket = $bucket;
         $this->objectKey = $objectKey;
         $this->s3Service = $s3Service;
         $this->tempDir = $tempDir;
+        $this->storageConfiguration = $storageConfiguration;
     }
 
     public function getImagick(): Imagick
@@ -70,14 +74,9 @@ class PhotoOfSpecimen
         return $this->objectKey;
     }
 
-    public function getJP2ObjectKey(): string
-    {
-        return str_replace("tif", "jp2", $this->getObjectKey());
-    }
-
     public function getJP2Fullname(): string
     {
-        return $this->tempDir->getPath($this->getJP2ObjectKey());
+        return $this->tempDir->getPath($this->storageConfiguration->getJP2ObjectKey($this->getObjectKey()));
     }
 
     public function getHeight(): int

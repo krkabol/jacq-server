@@ -37,4 +37,9 @@ final class StorageConfiguration
         return $this->config['jp2Quality'];
     }
 
+    public function getJP2ObjectKey($archiveObjectKey): string
+    {
+        return str_replace("tif", "jp2", $archiveObjectKey);
+    }
+
 }

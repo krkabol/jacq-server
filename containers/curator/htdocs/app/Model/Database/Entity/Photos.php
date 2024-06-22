@@ -85,4 +85,45 @@ class Photos
         $this->JP2FileSize = $JP2FileSize;
         return $this;
     }
+
+    public function getArchiveFilename(): string
+    {
+        return $this->archiveFilename;
+    }
+
+    public function getHerbarium(): Herbaria
+    {
+        return $this->herbarium;
+    }
+
+    public function getWidth(): ?int
+    {
+        return $this->width;
+    }
+
+    public function getHeight(): ?int
+    {
+        return $this->height;
+    }
+
+    public function getSpecimenId(): ?string
+    {
+        return $this->specimenId;
+    }
+
+    public function getArchiveFileSize(): ?int
+    {
+        return $this->archiveFileSize;
+    }
+
+    public function getJP2FileSize(): ?int
+    {
+        return $this->JP2FileSize;
+    }
+
+    public function isFinalized(): bool
+    {
+        return $this->finalized;
+    }
+
 }
