@@ -5,6 +5,7 @@ services:
 	- App\Services\DatabaseService
 	- App\Services\WebDir(%wwwDir%)
 	- App\Services\TempDir(%tempDir%)
+	- App\Services\StorageConfiguration(%storage%)
 	- App\Model\PhotoOfSpecimenFactory
 	- App\Model\Stages\StageFactory
 

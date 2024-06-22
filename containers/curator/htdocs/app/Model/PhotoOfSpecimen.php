@@ -6,7 +6,6 @@ namespace app\Model;
 
 use app\Services\S3Service;
 use app\Services\TempDir;
-use app\UI\Home\HomePresenter;
 use Imagick;
 
 

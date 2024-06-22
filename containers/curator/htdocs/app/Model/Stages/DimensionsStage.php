@@ -6,7 +6,7 @@ namespace app\Model\Stages;
 
 use app\Model\PhotoOfSpecimen;
 use app\Services\S3Service;
-use app\UI\Home\HomePresenter;
+use app\Services\StorageConfiguration;
 use League\Pipeline\StageInterface;
 
 class DimensionStageException extends BaseStageException
@@ -17,10 +17,12 @@ class DimensionStageException extends BaseStageException
 class DimensionsStage implements StageInterface
 {
     private S3Service $s3Service;
+    private StorageConfiguration $configuration;
 
-    public function __construct(S3Service $s3Service)
+    public function __construct(S3Service $s3Service, StorageConfiguration $configuration)
     {
         $this->s3Service = $s3Service;
+        $this->configuration = $configuration;
     }
 
     public function __invoke($payload)
@@ -30,7 +32,7 @@ class DimensionsStage implements StageInterface
             $imagick = $payload->getImagick();
             $payload->setWidth($imagick->getImageWidth());
             $payload->setHeight($imagick->getImageHeight());
-            $payload->setTiffSize($this->s3Service->getObjectSize(HomePresenter::START_BUCKET, $payload->getObjectKey()));
+            $payload->setTiffSize($this->s3Service->getObjectSize($this->configuration->getNewBucket(), $payload->getObjectKey()));
         } catch (\Exception $exception) {
             throw new DimensionStageException("dimensions error (" . $exception->getMessage() . "): " . $payload->getObjectKey());
         }

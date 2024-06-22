@@ -7,7 +7,6 @@ namespace app\Services;
 use app\Model\PhotoOfSpecimenFactory;
 use app\Model\Stages\BarcodeStage;
 use app\Model\Stages\BaseStageException;
-use app\Model\Stages\DimensionsStage;
 use app\Model\Stages\FilenameControlStage;
 use app\Model\Stages\StageFactory;
 use app\UI\Home\HomePresenter;
@@ -21,23 +20,26 @@ class TestService
     private PhotoOfSpecimenFactory $photoOfSpecimenFactory;
     private StageFactory $stageFactory;
 
-    public function __construct(S3Service $S3Service, WebDir $webDir, PhotoOfSpecimenFactory $photoOfSpecimenFactory, StageFactory $stageFactory)
+    private StorageConfiguration $storageConfiguration;
+
+    public function __construct(S3Service $S3Service, WebDir $webDir, PhotoOfSpecimenFactory $photoOfSpecimenFactory, StageFactory $stageFactory, StorageConfiguration $storageConfiguration)
     {
         $this->S3Service = $S3Service;
         $this->webDir = $webDir;
         $this->photoOfSpecimenFactory = $photoOfSpecimenFactory;
         $this->stageFactory = $stageFactory;
+        $this->storageConfiguration = $storageConfiguration;
     }
 
     public function initialize(): void
     {
-        foreach (HomePresenter::BUCKETS as $bucket) {
+        foreach ($this->storageConfiguration->getAllBuckets() as $bucket) {
             $this->S3Service->createBucket($bucket);
         }
 
         $testDataDir = $this->webDir->getPath('data');
         foreach (HomePresenter::TEST_FILES as $file) {
-            $this->S3Service->putTiffIfNotExists(HomePresenter::START_BUCKET, strtolower($file), $testDataDir . DIRECTORY_SEPARATOR . $file);
+            $this->S3Service->putTiffIfNotExists($this->storageConfiguration->getNewBucket(), strtolower($file), $testDataDir . DIRECTORY_SEPARATOR . $file);
         }
     }
 
@@ -48,7 +50,7 @@ class TestService
         $error = [];
         foreach (HomePresenter::TEST_FILES as $file) {
             try {
-                $photo = $this->photoOfSpecimenFactory->create(HomePresenter::START_BUCKET, $file);
+                $photo = $this->photoOfSpecimenFactory->create($this->storageConfiguration->getNewBucket(), $file);
                 $pipeline->process($photo);
                 $success[$file] = "OK";
             } catch (BaseStageException $e) {

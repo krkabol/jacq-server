@@ -6,7 +6,7 @@ namespace app\Model\Stages;
 
 use app\Model\PhotoOfSpecimen;
 use app\Services\S3Service;
-use app\UI\Home\HomePresenter;
+use app\Services\StorageConfiguration;
 use Exception;
 use League\Pipeline\StageInterface;
 
@@ -18,10 +18,12 @@ class ConvertStageException extends BaseStageException
 class ConvertStage implements StageInterface
 {
     private S3Service $s3Service;
+    private StorageConfiguration $configuration;
 
-    public function __construct(S3Service $s3Service)
+    public function __construct(S3Service $s3Service, StorageConfiguration $configuration)
     {
         $this->s3Service = $s3Service;
+        $this->configuration = $configuration;
     }
 
 
@@ -32,8 +34,8 @@ class ConvertStage implements StageInterface
             $imagick = $payload->getImagick();
             $imagick->setImageFormat('jp2');
             $imagick->writeImage($payload->getJP2Fullname());
-            $this->s3Service->putJP2Overwrite(HomePresenter::JP2_BUCKET, $payload->getJP2ObjectKey(), $payload->getJP2Fullname());
-            $payload->setJp2Size($this->s3Service->getObjectSize(HomePresenter::JP2_BUCKET, $payload->getJP2ObjectKey()));
+            $this->s3Service->putJP2Overwrite($this->configuration->getJP2Bucket(), $payload->getJP2ObjectKey(), $payload->getJP2Fullname());
+            $payload->setJp2Size($this->s3Service->getObjectSize($this->configuration->getJP2Bucket(), $payload->getJP2ObjectKey()));
             unlink($payload->getJP2Fullname());
         } catch (Exception $exception) {
             throw new ConvertStageException("unable convert to JP2 (" . $exception->getMessage() . "): " . $payload->getObjectKey());

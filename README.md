@@ -40,4 +40,4 @@ follow wisely previous section +
 * route for specimen id - provide list of images
 * route proxy tif image from S3
 * available herbaria read from db
-* * transform into webapp with authorization
+* transform into webapp with authorization

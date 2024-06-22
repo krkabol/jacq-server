@@ -1,4 +1,8 @@
 parameters:
-	database:
-		driver: pdo_mysql
-		port: 3306
+    database:
+        driver: pdo_mysql
+        port: 3306
+    storage:
+        archiveBucket: archive
+        jp2Bucket: iiif
+        newBucket: new

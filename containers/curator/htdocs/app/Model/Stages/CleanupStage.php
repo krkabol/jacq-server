@@ -7,7 +7,7 @@ namespace app\Model\Stages;
 
 use app\Model\PhotoOfSpecimen;
 use app\Services\S3Service;
-use app\UI\Home\HomePresenter;
+use app\Services\StorageConfiguration;
 use League\Pipeline\StageInterface;
 
 class CleanupStageException extends BaseStageException
@@ -19,10 +19,12 @@ class CleanupStage implements StageInterface
 {
 
     private S3Service $s3Service;
+    private StorageConfiguration $configuration;
 
-    public function __construct(S3Service $s3Service)
+    public function __construct(S3Service $s3Service, StorageConfiguration $configuration)
     {
         $this->s3Service = $s3Service;
+        $this->configuration = $configuration;
     }
 
     public function __invoke($payload)
@@ -31,7 +33,7 @@ class CleanupStage implements StageInterface
             /** @var PhotoOfSpecimen $payload */
             $payload->unsetImagick();
             unlink($payload->getTempfile());
-            $this->s3Service->deleteObject(HomePresenter::START_BUCKET, $payload->getObjectKey());
+            $this->s3Service->deleteObject($this->configuration->getNewBucket(), $payload->getObjectKey());
         } catch (\Exception $exception) {
             throw new CleanupStageException("cleanup error (" . $exception->getMessage() . "): " . $payload->getObjectKey());
         }
