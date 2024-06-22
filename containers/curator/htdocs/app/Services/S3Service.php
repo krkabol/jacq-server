@@ -99,6 +99,14 @@ class S3Service
         return $result['ContentLength'];
     }
 
+    public function headObject($bucket, $key)
+    {
+        return $this->s3->headObject([
+            'Bucket' => $bucket,
+            'Key' => $key,
+        ]);
+    }
+
     public function deleteObject(string $bucket, string $key)
     {
         $this->s3->deleteObject([
@@ -130,11 +138,17 @@ class S3Service
         $objects = [];
         $result = $this->s3->getIterator('ListObjects', array(
             "Bucket" => $bucket,
-           // "Prefix" => 'some_folder/'
+            // "Prefix" => 'some_folder/'
         ));
         foreach ($result as $object) {
             $objects[] = $object['Key'];
         }
         return $objects;
+    }
+
+    public function getStreamOfObject($bucket, $key)
+    {
+        $this->s3->registerStreamWrapper();
+        return fopen("s3://{$bucket}/{$key}", 'r');
     }
 }

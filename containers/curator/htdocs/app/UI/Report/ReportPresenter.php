@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace app\UI\Report;
 
 use App\Services\ReportService;
-use Nette\Application\UI\Presenter;
+use app\UI\Base\BasePresenter;
 
 
-final class ReportPresenter extends Presenter
+final class ReportPresenter extends BasePresenter
 {
     /** @inject  */
     public ReportService $reportService;
