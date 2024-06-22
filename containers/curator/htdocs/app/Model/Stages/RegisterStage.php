@@ -7,6 +7,8 @@ namespace app\Model\Stages;
 use app\Model\Database\Entity\Photos;
 use App\Model\Database\EntityManager;
 use app\Model\PhotoOfSpecimen;
+use app\Services\S3Service;
+use app\Services\StorageConfiguration;
 use League\Pipeline\StageInterface;
 
 class RegisterStageException extends BaseStageException
@@ -18,15 +20,22 @@ class RegisterStage implements StageInterface
 {
 
     protected EntityManager $entityManager;
+    protected StorageConfiguration $configuration;
+    protected S3Service $s3Service;
 
-    public function __construct(EntityManager $entityManager)
+
+
+    public function __construct(EntityManager $entityManager, StorageConfiguration $configuration, S3Service $s3Service)
     {
         $this->entityManager = $entityManager;
+        $this->configuration = $configuration;
+        $this->s3Service = $s3Service;
     }
 
     public function __invoke($payload)
     {
         try {
+            $payload->setJp2Size($this->s3Service->getObjectSize($this->configuration->getJP2Bucket(), $this->configuration->getJP2ObjectKey($payload->getObjectKey())));
             $this->writeRecord($payload);;
         } catch (\Exception $exception) {
             throw new RegisterStageException("db write error (" . $exception->getMessage() . "): " . $payload->getObjectKey());

@@ -33,7 +33,7 @@ class StageFactory
 
     public function createRegisterStage(): RegisterStage
     {
-        return new RegisterStage($this->entityManager);
+        return new RegisterStage($this->entityManager, $this->storageConfiguration, $this->s3Service);
     }
 
     public function createCleanupStage(): CleanupStage

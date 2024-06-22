@@ -37,7 +37,6 @@ class ConvertStage implements StageInterface
             $imagick->writeImage($payload->getJP2Fullname());
 
             $this->s3Service->putJP2Overwrite($this->configuration->getJP2Bucket(), $this->configuration->getJP2ObjectKey($payload->getObjectKey()), $payload->getJP2Fullname());
-            $payload->setJp2Size($this->s3Service->getObjectSize($this->configuration->getJP2Bucket(), $this->configuration->getJP2ObjectKey($payload->getObjectKey())));
 
             unlink($payload->getJP2Fullname());
         } catch (Exception $exception) {
