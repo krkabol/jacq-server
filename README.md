@@ -36,6 +36,5 @@ follow wisely previous section +
 
 ### curator
 * pipeline for iiif/archive bucket postcontrol
-* route for specimen id - provide list of images
 * available herbaria read from db
 * transform into real webapp with authorization
