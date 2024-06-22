@@ -116,6 +116,7 @@ services:
     phpmyadmin:
         image: phpmyadmin
         container_name: jacq_prc_myadmin
+        restart: unless-stopped
         ports:
             - 8080:80
         depends_on:

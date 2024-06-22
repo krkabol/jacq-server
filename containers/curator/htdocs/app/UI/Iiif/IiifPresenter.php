@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace app\UI\Iiif;
 
+use App\Model\Database\EntityManager;
 use app\Services\S3Service;
 use app\Services\StorageConfiguration;
 use app\UI\Base\BasePresenter;
@@ -19,14 +20,24 @@ final class IiifPresenter extends BasePresenter
     /** @inject */
     public StorageConfiguration $configuration;
 
-    public function actionImage($id)
+    /** @inject */
+    public EntityManager $entityManager;
+    protected $photosRepository;
+
+    public function beforeRender()
+    {
+        $this->photosRepository = $this->entityManager->getPhotosRepository();
+        parent::beforeRender();
+    }
+
+    public function actionArchiveImage($id)
     {
         $bucket = $this->configuration->getArchiveBucket();
         if ($this->s3Service->objectExists($bucket, $id)) {
             $head = $this->s3Service->headObject($bucket, $id);
             $stream = $this->s3Service->getStreamOfObject($bucket, $id);
 
-            $callback = function (Request $httpRequest, Response $httpResponse) use ($id, $head, $stream){
+            $callback = function (Request $httpRequest, Response $httpResponse) use ($id, $head, $stream) {
                 $httpResponse->addHeader("Content-Type", $head['ContentType']);
                 $httpResponse->addHeader('Content-Disposition', "inline; filename" . $id);
                 fpassthru($stream);
@@ -37,6 +48,16 @@ final class IiifPresenter extends BasePresenter
             $this->sendResponse($response);
         }
         $this->error("The requested image does not exists.");
+    }
+
+    public function renderSpecimen($id)
+    {
+        $acronym = $this->configuration->getHerbariumAcronymFromId($id);
+        $specimenId = $this->configuration->getSpecimenIdFromId($id);
+        $herbarium = $this->entityManager->getHerbariaRepository()->findOneByAcronym($acronym);
+        $images = $this->photosRepository->findBy(["herbarium"=>$herbarium,"specimenId"=>$specimenId]);
+        $this->template->images = $images;
+        $this->template->configuration = $this->configuration;
     }
 
 }

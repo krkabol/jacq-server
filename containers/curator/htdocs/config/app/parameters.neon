@@ -7,3 +7,4 @@ parameters:
         jp2Bucket: iiif
         newBucket: new
         jp2Quality: 46
+        regex: '/^(?P<herbarium>[a-zA-Z]+)_(?P<specimenId>\d+)$/'

@@ -2,6 +2,9 @@
 
 namespace app\Services;
 
+use app\Model\Database\Entity\Herbaria;
+use app\Model\Stages\FilenameControlException;
+
 final class StorageConfiguration
 {
 
@@ -37,9 +40,34 @@ final class StorageConfiguration
         return $this->config['jp2Quality'];
     }
 
+    public function getSpecimenNameRegex(): string
+    {
+        return $this->config['regex'];
+    }
+
     public function getJP2ObjectKey($archiveObjectKey): string
     {
         return str_replace("tif", "jp2", $archiveObjectKey);
+    }
+
+    public function getHerbariumAcronymFromId($specimenId): string
+    {
+        return $this->splitId($specimenId)["herbarium"];
+    }
+
+    public function getSpecimenIdFromId($specimenId): string
+    {
+        return $this->splitId($specimenId)["specimenId"];
+    }
+
+    protected function splitId($specimenId)
+    {
+        $parts = [];
+        if (preg_match($this->getSpecimenNameRegex(), $specimenId, $parts)) {
+            return $parts;
+        } else {
+            throw new FilenameControlException("invalid name format: " . $specimenId);
+        }
     }
 
 }
