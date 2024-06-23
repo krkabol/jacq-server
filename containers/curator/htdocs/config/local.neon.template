@@ -17,3 +17,6 @@ aws:
         key: minio
         secret: password
 
+security:
+	users:
+		prc: password

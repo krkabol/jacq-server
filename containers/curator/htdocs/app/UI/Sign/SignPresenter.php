@@ -2,15 +2,11 @@
 
 namespace app\UI\Sign;
 
-use App\Exception\Runtime\AuthenticationException;
-use App\Modules\Admin\BaseAdminPresenter;
-use App\Modules\Admin\Sign\App;
-use App\Modules\Base\BasePresenter;
-use App\Services\SpecimenService;
+use app\UI\Base\BasePresenter;
 use app\UI\Base\SecuredPresenter;
-use App\UI\Form\BaseForm;
 use App\UI\Form\FormFactory;
-use Nette\Application\UI\ComponentReflection;
+use Nette\Application\UI\Form;
+use Nette\Security\AuthenticationException;
 
 final class SignPresenter extends SecuredPresenter
 {
@@ -28,8 +24,7 @@ final class SignPresenter extends SecuredPresenter
 
     public function actionIn(): void
     {
-        $this->getSessionSpecimenSection()->remove();
-        if ($this->user->isLoggedIn()) {
+          if ($this->user->isLoggedIn()) {
             $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_IN);
         }
     }
@@ -38,13 +33,12 @@ final class SignPresenter extends SecuredPresenter
     {
         if ($this->user->isLoggedIn()) {
             $this->user->logout();
-            $this->getSessionSpecimenSection()->remove();
         }
 
         $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_OUT);
     }
 
-    public function processLoginForm(BaseForm $form): void
+    public function processLoginForm(Form $form): void
     {
         try {
             $this->user->setExpiration($form->values->remember ? '14 days' : '20 minutes');
@@ -61,7 +55,7 @@ final class SignPresenter extends SecuredPresenter
         $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_IN);
     }
 
-    protected function createComponentLoginForm(): BaseForm
+    protected function createComponentLoginForm(): Form
     {
         $form = $this->formFactory->create();
         $form->addText('username')

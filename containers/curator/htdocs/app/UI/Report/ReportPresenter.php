@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace app\UI\Report;
 
 use App\Services\ReportService;
-use app\UI\Base\BasePresenter;
+use app\UI\Base\SecuredPresenter;
 
 
-final class ReportPresenter extends BasePresenter
+final class ReportPresenter extends SecuredPresenter
 {
     /** @inject  */
     public ReportService $reportService;

@@ -8,7 +8,7 @@ use app\Model\PhotoOfSpecimenFactory;
 use app\Model\Stages\BarcodeStage;
 use app\Model\Stages\BaseStageException;
 use app\Model\Stages\StageFactory;
-use app\UI\Home\HomePresenter;
+use app\UI\Home\CuratorPresenter;
 use League\Pipeline\Pipeline;
 
 class TestService
@@ -38,7 +38,7 @@ class TestService
         }
 
         $testDataDir = $this->webDir->getPath('data');
-        foreach (HomePresenter::TEST_FILES as $file) {
+        foreach (CuratorPresenter::TEST_FILES as $file) {
             $this->S3Service->putTiffIfNotExists($this->storageConfiguration->getNewBucket(), strtolower($file), $testDataDir . DIRECTORY_SEPARATOR . $file);
         }
     }
@@ -48,7 +48,7 @@ class TestService
         $pipeline = $this->fileProcessingPipeline();
         $success = [];
         $error = [];
-        foreach (HomePresenter::TEST_FILES as $file) {
+        foreach (CuratorPresenter::TEST_FILES as $file) {
             try {
                 $photo = $this->photoOfSpecimenFactory->create($this->storageConfiguration->getNewBucket(), $file);
                 $pipeline->process($photo);
