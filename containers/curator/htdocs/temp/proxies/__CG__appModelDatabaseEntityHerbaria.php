@@ -67,10 +67,10 @@ class Herbaria extends \app\Model\Database\Entity\Herbaria implements \Doctrine\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'acronym', 'photos', '' . "\0" . 'app\\Model\\Database\\Entity\\Herbaria' . "\0" . 'id'];
+            return ['__isInitialized__', 'acronym', 'photos', 'id'];
         }
 
-        return ['__isInitialized__', 'acronym', 'photos', '' . "\0" . 'app\\Model\\Database\\Entity\\Herbaria' . "\0" . 'id'];
+        return ['__isInitialized__', 'acronym', 'photos', 'id'];
     }
 
     /**

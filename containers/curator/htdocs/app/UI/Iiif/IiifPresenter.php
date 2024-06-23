@@ -57,7 +57,6 @@ final class IiifPresenter extends BasePresenter
         $herbarium = $this->entityManager->getHerbariaRepository()->findOneByAcronym($acronym);
         $images = $this->photosRepository->findBy(["herbarium"=>$herbarium,"specimenId"=>$specimenId]);
         $this->template->images = $images;
-        $this->template->configuration = $this->configuration;
     }
 
 }

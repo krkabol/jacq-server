@@ -56,6 +56,7 @@ class RegisterStage implements StageInterface
         $entity
             ->setCreatedAt()
             ->setArchiveFilename($payload->getObjectKey())
+            ->setJp2Filename($this->configuration->getJP2ObjectKey($payload->getObjectKey()))
             ->setFinalized(true)
             ->setHerbarium($herbarium)
             ->setHeight($payload->getHeight())

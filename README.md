@@ -37,4 +37,4 @@ follow wisely previous section +
 * transform into real webapp with authorization
 * try to get curator on the GitHub Registry - separate curator and deployment
 * write a report on GDrive
-* 
+*

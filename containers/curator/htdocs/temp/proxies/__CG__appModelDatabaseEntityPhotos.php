@@ -67,10 +67,10 @@ class Photos extends \app\Model\Database\Entity\Photos implements \Doctrine\ORM\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'archiveFilename', 'herbarium', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'finalized', '' . "\0" . 'app\\Model\\Database\\Entity\\Photos' . "\0" . 'id', 'createdAt'];
+            return ['__isInitialized__', 'archiveFilename', 'jp2Filename', 'herbarium', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'finalized', 'id', 'createdAt'];
         }
 
-        return ['__isInitialized__', 'archiveFilename', 'herbarium', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'finalized', '' . "\0" . 'app\\Model\\Database\\Entity\\Photos' . "\0" . 'id', 'createdAt'];
+        return ['__isInitialized__', 'archiveFilename', 'jp2Filename', 'herbarium', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'finalized', 'id', 'createdAt'];
     }
 
     /**
@@ -182,6 +182,17 @@ class Photos extends \app\Model\Database\Entity\Photos implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
+    public function getArchiveFilename(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getArchiveFilename', []);
+
+        return parent::getArchiveFilename();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setArchiveFilename(string $archiveFilename): \app\Model\Database\Entity\Photos
     {
 
@@ -193,34 +204,34 @@ class Photos extends \app\Model\Database\Entity\Photos implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
-    public function setWidth(?int $width): \app\Model\Database\Entity\Photos
+    public function getJp2Filename(): string
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setWidth', [$width]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJp2Filename', []);
 
-        return parent::setWidth($width);
+        return parent::getJp2Filename();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setHeight(?int $height): \app\Model\Database\Entity\Photos
+    public function setJp2Filename(string $jp2Filename): \app\Model\Database\Entity\Photos
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHeight', [$height]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setJp2Filename', [$jp2Filename]);
 
-        return parent::setHeight($height);
+        return parent::setJp2Filename($jp2Filename);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setSpecimenId(?string $specimenId): \app\Model\Database\Entity\Photos
+    public function getHerbarium(): \app\Model\Database\Entity\Herbaria
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSpecimenId', [$specimenId]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHerbarium', []);
 
-        return parent::setSpecimenId($specimenId);
+        return parent::getHerbarium();
     }
 
     /**
@@ -237,12 +248,78 @@ class Photos extends \app\Model\Database\Entity\Photos implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
-    public function setFinalized(bool $finalized): \app\Model\Database\Entity\Photos
+    public function getWidth(): ?int
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFinalized', [$finalized]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getWidth', []);
 
-        return parent::setFinalized($finalized);
+        return parent::getWidth();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setWidth(?int $width): \app\Model\Database\Entity\Photos
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setWidth', [$width]);
+
+        return parent::setWidth($width);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getHeight(): ?int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHeight', []);
+
+        return parent::getHeight();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setHeight(?int $height): \app\Model\Database\Entity\Photos
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHeight', [$height]);
+
+        return parent::setHeight($height);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSpecimenId(): ?string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSpecimenId', []);
+
+        return parent::getSpecimenId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSpecimenId(?string $specimenId): \app\Model\Database\Entity\Photos
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSpecimenId', [$specimenId]);
+
+        return parent::setSpecimenId($specimenId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getArchiveFileSize(): ?int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getArchiveFileSize', []);
+
+        return parent::getArchiveFileSize();
     }
 
     /**
@@ -259,12 +336,45 @@ class Photos extends \app\Model\Database\Entity\Photos implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
+    public function getJP2FileSize(): ?int
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJP2FileSize', []);
+
+        return parent::getJP2FileSize();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setJP2FileSize(?int $JP2FileSize): \app\Model\Database\Entity\Photos
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setJP2FileSize', [$JP2FileSize]);
 
         return parent::setJP2FileSize($JP2FileSize);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isFinalized(): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isFinalized', []);
+
+        return parent::isFinalized();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFinalized(bool $finalized): \app\Model\Database\Entity\Photos
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFinalized', [$finalized]);
+
+        return parent::setFinalized($finalized);
     }
 
     /**

@@ -18,6 +18,9 @@ class Photos
     #[ORM\Column(unique: true, nullable: false, options: ["comment" => "Filename of Archive Master TIF file"])]
     protected string $archiveFilename;
 
+    #[ORM\Column(unique: true, nullable: false, options: ["comment" => "Filename of JP2 file"])]
+    protected string $jp2Filename;
+
     #[ORM\ManyToOne(targetEntity: "Herbaria", inversedBy: "photos")]
     #[ORM\JoinColumn(name: "herbarium_id", referencedColumnName: "id", options: ["comment" => "Herbarium storing and managing the specimen data"])]
     protected Herbaria $herbarium;
@@ -48,6 +51,19 @@ class Photos
         $this->archiveFilename = $archiveFilename;
         return $this;
     }
+
+    public function getJp2Filename(): string
+    {
+        return $this->jp2Filename;
+    }
+
+    public function setJp2Filename(string $jp2Filename): Photos
+    {
+        $this->jp2Filename = $jp2Filename;
+        return $this;
+    }
+
+
 
     public function getHerbarium(): Herbaria
     {
