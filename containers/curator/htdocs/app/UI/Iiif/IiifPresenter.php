@@ -56,7 +56,11 @@ final class IiifPresenter extends BasePresenter
         $specimenId = $this->configuration->getSpecimenIdFromId($id);
         $herbarium = $this->entityManager->getHerbariaRepository()->findOneByAcronym($acronym);
         $images = $this->photosRepository->findBy(["herbarium"=>$herbarium,"specimenId"=>$specimenId]);
+        if(count($images)===0){
+            $this->error("Specimen ". $id ."not in evidence.");
+        }
         $this->template->images = $images;
+        $this->template->id = $id;
     }
 
 }

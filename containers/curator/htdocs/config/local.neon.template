@@ -19,4 +19,4 @@ aws:
 
 security:
 	users:
-		prc: password
+		prc: prc

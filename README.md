@@ -34,7 +34,9 @@ follow wisely previous section +
 ## TODO
 
 ### curator
-* transform into real webapp with authorization
 * try to get curator on the GitHub Registry - separate curator and deployment
 * write a report on GDrive
+* provide controlPipeline to curators
+* differentiate curator and test service
+* use assets when individual domain available
 *
