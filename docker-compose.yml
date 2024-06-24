@@ -19,8 +19,6 @@ services:
         image: ghcr.io/krkabol/jacq-cantaloupe:main
         restart: unless-stopped
         container_name: jacq-cantaloupe
-        ports:
-            - 8182:8182
         environment:
             HTTP_HTTP2_ENABLED: "true"
             HTTPS_HTTP2_ENABLED: "true"
