@@ -29,7 +29,7 @@ services:
             ENDPOINT_IIIF_CONTENT_DISPOSITION: none
             ENDPOINT_ADMIN_ENABLED: "false"
             SOURCE_STATIC: S3Source
-            S3SOURCE_ENDPOINT: https://s3.cl4.du.cesnet.cz
+            S3SOURCE_ENDPOINT: ${S3_ENDPOINT}
             S3SOURCE_ACCESS_KEY_ID: ${S3_USER}
             S3SOURCE_SECRET_KEY: ${S3_PASSWD}
             S3SOURCE_BASICLOOKUPSTRATEGY_BUCKET_NAME: iiif
@@ -49,13 +49,15 @@ services:
             LOG_ACCESS_CONSOLEAPPENDER_ENABLED: "false"
 
     curator:
-        image: ghcr.io/krkabol/jacq-image-curator:latest
+        image: ghcr.io/krkabol/jacq-image-curator:main
         container_name: jacq-curator
         restart: unless-stopped
         depends_on:
             - curator-db
         environment:
             NETTE_ENV: "production"
+        volumes:
+            - ./local.neon:/srv/config/local.neon
 
     curator-db:
         image: mariadb:11
