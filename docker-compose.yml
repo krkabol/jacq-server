@@ -10,11 +10,10 @@ services:
             - cantaloupe
             - curator
         environment:
-            DOMAINS: 'herbarium2.natur.cuni.cz -> http://cantaloupe:8182'
+            DOMAINS: 'herbarium2.natur.cuni.cz -> http://curator, herbarium-iiif.natur.cuni.cz -> http://cantaloupe:8182'
             STAGE: 'local' # 'local' | 'production'
         volumes:
             - proxy_storage:/var/lib/https-portal
-            - ./containers/proxy/herbarium2.natur.cuni.cz.ssl.conf.erb:/var/lib/nginx-conf/herbarium2.natur.cuni.cz.ssl.conf.erb:ro
 
     cantaloupe:
         build:
@@ -24,15 +23,13 @@ services:
         container_name: jacq-cantaloupe
         ports:
             - 8182:8182
-        depends_on:
-            - minio
         environment:
             HTTP_HTTP2_ENABLED: "true"
             HTTPS_HTTP2_ENABLED: "true"
             ENDPOINT_IIIF_CONTENT_DISPOSITION: none
             ENDPOINT_ADMIN_ENABLED: "false"
             SOURCE_STATIC: S3Source
-            S3SOURCE_ENDPOINT: http://minio:9000
+            S3SOURCE_ENDPOINT: https://s3.cl4.du.cesnet.cz
             S3SOURCE_ACCESS_KEY_ID: ${S3_USER}
             S3SOURCE_SECRET_KEY: ${S3_PASSWD}
             S3SOURCE_BASICLOOKUPSTRATEGY_BUCKET_NAME: iiif
@@ -43,7 +40,7 @@ services:
             CACHE_SERVIER_DERIVATIVE_TTL_SECONDS: 0
             CACHE_SERVER_PURGE_MISSING: "true"
             CACHE_SERVER_WORKER_ENABLED: "true"
-            S3CACHE_ENDPOINT: http://minio:9000
+            S3CACHE_ENDPOINT: https://s3.cl4.du.cesnet.cz
             S3CACHE_ACCESS_KEY_ID: ${S3_USER}
             S3CACHE_SECRET_KEY: ${S3_PASSWD}
             S3CACHE_BUCKET_NAME: images
@@ -52,17 +49,13 @@ services:
             LOG_ACCESS_CONSOLEAPPENDER_ENABLED: "false"
 
     curator:
-        build:
-            context: containers
-            dockerfile: Dockerfile_curator
+        image: ghcr.io/krkabol/jacq-image-curator:latest
         container_name: jacq-curator
         restart: unless-stopped
         depends_on:
             - curator-db
         environment:
-            NETTE_ENV: "development"
-        volumes:
-            - ./containers/curator/htdocs:/srv/
+            NETTE_ENV: "production"
 
     curator-db:
         image: mariadb:11
@@ -74,23 +67,9 @@ services:
             MARIADB_DATABASE: curator
             MARIADB_PASSWORD: ${CURATOR_PASSWORD}
         volumes:
-            - curator_db_storage:/var/lib/mysql
-#            - ./data/curator-db:/var/lib/mysql #for production
+            - ./data/curator-db:/var/lib/mysql
         command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
 
-    minio:
-        image: minio/minio
-        container_name: jacq_minio
-        restart: unless-stopped
-        command: [ "server", "--console-address", ":9001", "/data" ]
-        ports:
-            - 9000:9000
-            - 9001:9001
-        environment:
-            - MINIO_ROOT_USER=${S3_USER}
-            - MINIO_ROOT_PASSWORD=${S3_PASSWD}
-        volumes:
-            - minio_storage:/data
 
 #    mariadb-slave:
 #        image: yidigun/mariadb-replication:10.7
@@ -128,6 +107,4 @@ services:
             - MAX_EXECUTION_TIME=6000
 
 volumes:
-    minio_storage:
     proxy_storage:
-    curator_db_storage:
