@@ -2,13 +2,15 @@
 <h2>Management of images</h2>
 <a n:href="Sign:out">Sign out</a><hr>
 
-1. [link for image processing temporally disabled]
+1. [link for image processing temporally disabled], but you can run <a n:href=":dryrun">dry run</a> to control images in <em>new</em> bucket. Limit for single batch processing is {\app\Services\ImageService::LIMIT} files.
 <pre>
     <b>Implemented steps of image processing:</b>
+            --dryrun
             filename - split acronym and specimenId, check validity {1|status}
             novelty - check if the same file is already in archive {1|status}
             dimensions - read height, width {1|status}
             barcode - detect barcode and check for consistency with filename {1|status}
+            --after dryrun
             convert - creates JP2 file and put to bucket, {1|status}
             archive - move tiff file from <i>new</i> bucket to the <i>archive</i> bucket {1|status}
             cleanup - remove temp file {1|status}

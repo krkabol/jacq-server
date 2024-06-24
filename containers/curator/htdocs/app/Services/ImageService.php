@@ -8,7 +8,6 @@ use app\Model\PhotoOfSpecimenFactory;
 use app\Model\Stages\BarcodeStage;
 use app\Model\Stages\BaseStageException;
 use app\Model\Stages\StageFactory;
-use app\UI\Test\TestPresenter;
 use League\Pipeline\Pipeline;
 
 class ImageService
@@ -30,22 +29,10 @@ class ImageService
 
     public function proceedNewImages(): array
     {
-        $pipeline = $this->fileProcessingPipeline();
-        $success = [];
-        $error = [];
-        foreach (TestPresenter::TEST_FILES as $file) {
-            try {
-                $photo = $this->photoOfSpecimenFactory->create($this->storageConfiguration->getNewBucket(), $file);
-                $pipeline->process($photo);
-                $success[$file] = "OK";
-            } catch (BaseStageException $e) {
-                $error[$file] = $e->getMessage();
-            }
-        }
-        return [$success, $error];
+        return $this->runPipeline($this->fileProcessingPipeline());
     }
 
-    protected function fileProcessingPipeline(): Pipeline
+    public function fileProcessingPipeline(): Pipeline
     {
         return $this->controlPipeline()
             ->pipe($this->stageFactory->createConvertStage())
@@ -54,7 +41,7 @@ class ImageService
             ->pipe($this->stageFactory->createCleanupStage());
     }
 
-    protected function controlPipeline(): Pipeline
+    public function controlPipeline(): Pipeline
     {
         return (new Pipeline())
             ->pipe($this->stageFactory->createFilenameControlStage())
@@ -63,6 +50,31 @@ class ImageService
             ->pipe(new BarcodeStage);
     }
 
+    public function proceedDryrun(): array
+    {
+        return $this->runPipeline($this->controlPipeline());
+    }
+
+    protected function runPipeline(Pipeline $pipeline): array
+    {
+        $success = [];
+        $error = [];
+        $i = 0;
+        foreach ($this->S3Service->listObjects($this->storageConfiguration->getNewBucket()) as $file) {
+            try {
+                $photo = $this->photoOfSpecimenFactory->create($this->storageConfiguration->getNewBucket(), $file);
+                $pipeline->process($photo);
+                $success[$file] = "OK";
+                $i++;
+            } catch (BaseStageException $e) {
+                $error[$file] = $e->getMessage();
+            }
+            if ($i >= self::LIMIT) {
+                break;
+            }
+        }
+        return [$success, $error];
+    }
 
 
 }

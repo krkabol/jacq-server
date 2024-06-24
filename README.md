@@ -36,6 +36,5 @@ follow wisely previous section +
 ### curator
 * try to get curator on the GitHub Registry - separate curator and deployment
 * write a report on GDrive
-* provide controlPipeline to curators
 * use assets when individual domain available
 *

@@ -11,14 +11,25 @@ use app\Model\Stages\StageFactory;
 use app\UI\Test\TestPresenter;
 use League\Pipeline\Pipeline;
 
-class TestService extends ImageService
+class TestService
 {
     protected WebDir $webDir;
 
-    public function __construct(S3Service $S3Service, WebDir $webDir, PhotoOfSpecimenFactory $photoOfSpecimenFactory, StageFactory $stageFactory, StorageConfiguration $storageConfiguration)
+    const LIMIT = 10;
+    protected S3Service $S3Service;
+    protected PhotoOfSpecimenFactory $photoOfSpecimenFactory;
+    protected StageFactory $stageFactory;
+    protected StorageConfiguration $storageConfiguration;
+    protected ImageService $imageService;
+
+    public function __construct(WebDir $webDir,S3Service $S3Service, PhotoOfSpecimenFactory $photoOfSpecimenFactory, StageFactory $stageFactory, StorageConfiguration $storageConfiguration, ImageService $imageService)
     {
         $this->webDir = $webDir;
-        parent::__construct($S3Service, $photoOfSpecimenFactory, $stageFactory, $storageConfiguration);
+        $this->S3Service = $S3Service;
+        $this->photoOfSpecimenFactory = $photoOfSpecimenFactory;
+        $this->stageFactory = $stageFactory;
+        $this->storageConfiguration = $storageConfiguration;
+        $this->imageService = $imageService;
     }
 
     public function initialize(): void
@@ -35,25 +46,7 @@ class TestService extends ImageService
 
     public function proceedExistingImages(): array
     {
-        $pipeline = $this->migrationPipeline();
-        $success = [];
-        $error = [];
-        $files = $this->S3Service->listObjects($this->storageConfiguration->getArchiveBucket());
-        $i = 0;
-        foreach ($files as $file) {
-            try {
-                $photo = $this->photoOfSpecimenFactory->create($this->storageConfiguration->getArchiveBucket(), $file);
-                $pipeline->process($photo);
-                $success[$file] = "OK";
-                $i++;
-            } catch (BaseStageException $e) {
-                $error[$file] = $e->getMessage();
-            }
-            if ($i >= self::LIMIT) {
-                break;
-            }
-        }
-        return [$success, $error];
+        return $this->runPipeline($this->migrationPipeline(),$this->storageConfiguration->getArchiveBucket());
     }
 
     protected function migrationPipeline(): Pipeline
@@ -65,5 +58,31 @@ class TestService extends ImageService
             ->pipe(new BarcodeStage)
             ->pipe($this->stageFactory->createRegisterStage())
             ->pipe($this->stageFactory->createCleanupStage());
+    }
+
+    public function proceedNewImages(): array
+    {
+        return $this->runPipeline($this->imageService->fileProcessingPipeline(),$this->storageConfiguration->getNewBucket());
+    }
+
+    protected function runPipeline(Pipeline $pipeline, $location): array
+    {
+        $success = [];
+        $error = [];
+        $i = 0;
+        foreach ($this->S3Service->listObjects($location) as $file) {
+            try {
+                $photo = $this->photoOfSpecimenFactory->create($location, $file);
+                $pipeline->process($photo);
+                $success[$file] = "OK";
+                $i++;
+            } catch (BaseStageException $e) {
+                $error[$file] = $e->getMessage();
+            }
+            if ($i >= self::LIMIT) {
+                break;
+            }
+        }
+        return [$success, $error];
     }
 }
