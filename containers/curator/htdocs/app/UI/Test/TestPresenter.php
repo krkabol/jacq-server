@@ -7,6 +7,7 @@ namespace app\UI\Test;
 use app\Services\S3Service;
 use app\Services\StorageConfiguration;
 use app\Services\TestService;
+use app\UI\Base\BasePresenter;
 use app\UI\Base\SecuredPresenter;
 
 
@@ -22,6 +23,14 @@ final class TestPresenter extends SecuredPresenter
 
     /** @inject */
     public TestService $testService;
+
+   public function checkRequirements($element): void
+   {
+       if($this->user->getId()!=="admin"){
+           $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_IN);
+       }
+       parent::checkRequirements($element);
+   }
 
     public function renderDefault()
     {

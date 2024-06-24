@@ -54,8 +54,6 @@ class S3Service
             } catch (AwsException $e) {
                 die("Error during bucket create: " . $e->getMessage() . "\n");
             }
-        } else {
-            throw new Exception("Bucket already exists");
         }
     }
 
