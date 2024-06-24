@@ -16,9 +16,7 @@ services:
             - proxy_storage:/var/lib/https-portal
 
     cantaloupe:
-        build:
-            context: containers
-            dockerfile: Dockerfile_cantaloupe
+        image: ghcr.io/krkabol/jacq-cantaloupe:main
         restart: unless-stopped
         container_name: jacq-cantaloupe
         ports:
