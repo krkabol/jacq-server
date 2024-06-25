@@ -36,10 +36,10 @@ services:
             CACHE_SERVIER_DERIVATIVE_TTL_SECONDS: 0
             CACHE_SERVER_PURGE_MISSING: "true"
             CACHE_SERVER_WORKER_ENABLED: "true"
-            S3CACHE_ENDPOINT: https://s3.cl4.du.cesnet.cz
+            S3CACHE_ENDPOINT: ${S3_ENDPOINT}
             S3CACHE_ACCESS_KEY_ID: ${S3_USER}
             S3CACHE_SECRET_KEY: ${S3_PASSWD}
-            S3CACHE_BUCKET_NAME: images
+            S3CACHE_BUCKET_NAME: cantaloupe
             S3CACHE_OBJECT_KEY_PREFIX: cache
             LOG_APPLICATION_LEVEL: warn
             LOG_ACCESS_CONSOLEAPPENDER_ENABLED: "false"
