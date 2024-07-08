@@ -54,6 +54,7 @@ services:
             NETTE_ENV: "production"
         volumes:
             - ./local.neon:/srv/config/local.neon
+            - ./policy.xml:/etc/ImageMagick-v6/policy.xml
 
     curator-db:
         image: mariadb:11
