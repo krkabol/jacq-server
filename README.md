@@ -1,9 +1,10 @@
 # jacq-PRC
 This is a preliminary solution for PRC herbarium interaction with JACQ build from:
-* proxy limiting access to public Cantaloupe interface + automatic management of certificates
-* Cantaloupe v5 image server with S3 data storage
+* proxy for automatic management of certificates
 * web application Curator handles primary data management after uploaded from herbaria
 * replica of JACQ database
+
+EDIT: Cantaloupe is migrated into K8s and no more present in this stack
 
 ## first run locally
 1) setup credentials (copy templates and update values) ```cp sample.env .env ``` and ```cp sample.local.neon local.neon ```

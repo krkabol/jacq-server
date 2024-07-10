@@ -57,8 +57,8 @@
 -->
 <policymap>
   <!-- <policy domain="resource" name="temporary-path" value="/tmp"/> -->
-  <policy domain="resource" name="memory" value="1GiB"/>
-  <policy domain="resource" name="map" value="1GiB"/>
+  <policy domain="resource" name="memory" value="3GiB"/>
+  <policy domain="resource" name="map" value="3GiB"/>
   <policy domain="resource" name="width" value="16KP"/>
   <policy domain="resource" name="height" value="16KP"/>
   <!-- <policy domain="resource" name="list-length" value="128"/> -->
