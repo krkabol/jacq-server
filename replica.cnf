@@ -1,0 +1,6 @@
+ [mariadb]
+    log-bin = 1
+    log-basename=PragueFaculty
+    server_id=20
+    report_host=PragueFaculty
+    #bind-address = 0.0.0.0

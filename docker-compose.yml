@@ -1,65 +1,14 @@
 services:
-    proxy:
-        image: steveltn/https-portal
-        ports:
-            - '80:80'
-            - '443:443'
-        restart: unless-stopped
-        container_name: jacq-proxy
-        links:
-            - curator
-        environment:
-            DOMAINS: 'herbarium2.natur.cuni.cz -> http://curator'
-            STAGE: 'production' # 'local' | 'production'
-        volumes:
-            - proxy_storage:/var/lib/https-portal
-
-    curator:
-        image: ghcr.io/krkabol/jacq-image-curator:1
-        container_name: jacq-curator
-        restart: unless-stopped
-        depends_on:
-            - curator-db
-        environment:
-            NETTE_ENV: "production"
-        volumes:
-            - ./local.neon:/srv/config/local.neon
-
-    curator-db:
-        image: mariadb:11
-        container_name: jacq-curator-db
-        restart: unless-stopped
-        environment:
-            MARIADB_ROOT_PASSWORD: ${CURATOR_ROOT_PASSWORD}
-            MARIADB_USER: curator
-            MARIADB_DATABASE: curator
-            MARIADB_PASSWORD: ${CURATOR_PASSWORD}
-        volumes:
-            - ./data/curator-db:/var/lib/mysql
-        command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
-
-
     jacq-slave:
-        image: yidigun/mariadb-replication:10
+        image: mariadb:10
         restart: unless-stopped
         container_name: jacq-slave
-        hostname: herbarium2.natur.cuni.cz
         environment:
-            - TZ=Europe/Vienna
-            - LANG=de_AT.UTF-8
-            - REPL_MODE=slave
-            - REPL_SERVER_ID=20
-            - PASSWORD_SECRET=passwords
-            - REPL_USERNAME=${REPLICATOR_USER}
-            - REPL_MASTER_HOST=input.jacq.org
-            - REPL_MASTER_PORT=3306
+            - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
         volumes:
-            - ./data/jacq_basefile:/base
-            - ./data/slave_jacq/data:/var/lib/mysql
-            - ./data/slave_jacq/log:/var/log/mysql
-            - ./data/slave_jacq/run:/run/mysqld
-        secrets:
-            - passwords
+            - /storage/cesnet-du5/test:/base
+            - ./data:/var/lib/mysql
+            - ./replica.cnf:/etc/mysql/conf.d/replica.cnf
 
     phpmyadmin:
         image: phpmyadmin
@@ -69,15 +18,7 @@ services:
             - 8080:80
         depends_on:
             - jacq-slave
-            - curator-db
         environment:
             - PMA_ARBITRARY=1
             - UPLOAD_LIMIT=10M
             - MAX_EXECUTION_TIME=6000
-
-volumes:
-    proxy_storage:
-
-secrets:
-    passwords:
-       file: ./passwords.sh
