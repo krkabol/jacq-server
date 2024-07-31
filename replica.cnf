@@ -1,10 +1,9 @@
  [mariadb]
-    log_bin = 1
+    log_bin = 0
     binlog_expire_logs_seconds = 10
     log_slave_updates = 0
     log_basename = PragueFaculty
     relay_log_purge = 1
-    relay_log_space_limit = 1500000000
     server_id = 20
     report_host = PragueFaculty
     #bind-address = 0.0.0.0
